@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>지니언스 보도자료 분석 | 2024~2026</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; background: #f0f4f8; color: #1a202c; line-height: 1.7; }
+
+  header { background: linear-gradient(135deg, #1a3a5f 0%, #2563a8 100%); color: white; padding: 36px 24px; }
+  header h1 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  header p { font-size: 13px; opacity: 0.8; }
+
+  nav { background: #fff; border-bottom: 1px solid #e2e8f0; padding: 0 16px; display: flex; gap: 0; overflow-x: auto; position: sticky; top: 0; z-index: 100; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  nav::-webkit-scrollbar { display: none; }
+  nav a { display: inline-block; padding: 12px 12px; font-size: 12px; color: #4a5568; text-decoration: none; white-space: nowrap; border-bottom: 3px solid transparent; transition: all 0.2s; font-weight: 500; }
+  nav a:hover, nav a.active { color: #2563a8; border-bottom-color: #2563a8; font-weight: 700; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+  section { margin-bottom: 48px; }
+  section:target { scroll-margin-top: 52px; }
+
+  h2 { font-size: 18px; font-weight: 700; color: #1a202c; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #2563a8; display: flex; align-items: center; gap: 8px; }
+
+  /* 요약 카드 */
+  .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+  .sum-card { background: #fff; border-radius: 10px; padding: 16px 12px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .sum-num { font-size: 28px; font-weight: 800; color: #2563a8; line-height: 1.2; }
+  .sum-label { font-size: 11px; color: #718096; margin-top: 4px; line-height: 1.4; }
+
+  /* 트렌드 카드 */
+  .trend-card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); border-left: 4px solid #2563a8; }
+  .trend-card.green { border-left-color: #2d8a3e; }
+  .trend-card.orange { border-left-color: #dd6b20; }
+  .trend-card.purple { border-left-color: #805ad5; }
+  .trend-card.red { border-left-color: #c53030; }
+  .trend-card.teal { border-left-color: #2c7a7b; }
+  .trend-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .trend-body { font-size: 13px; color: #4a5568; line-height: 1.8; }
+  .trend-tag { display: inline-block; background: #ebf8ff; color: #2b6cb0; padding: 1px 7px; border-radius: 10px; font-size: 11px; font-weight: 600; margin-right: 4px; }
+
+  /* 카테고리 파이 대체 바 */
+  .cat-row { display: flex; flex-direction: column; gap: 8px; }
+  .cat-item { display: flex; align-items: center; gap: 10px; }
+  .cat-label { font-size: 12px; color: #4a5568; width: 120px; flex-shrink: 0; }
+  .cat-bar-wrap { flex: 1; background: #e2e8f0; border-radius: 20px; height: 22px; overflow: hidden; }
+  .cat-bar { height: 100%; border-radius: 20px; display: flex; align-items: center; padding-left: 10px; font-size: 11px; font-weight: 700; color: white; transition: width 0.3s; }
+  .cat-count { font-size: 12px; font-weight: 700; color: #4a5568; width: 28px; text-align: right; flex-shrink: 0; }
+
+  /* 타임라인 */
+  .timeline { position: relative; padding-left: 20px; }
+  .timeline::before { content: ''; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: #e2e8f0; }
+  .tl-year { font-size: 13px; font-weight: 800; color: #2563a8; background: #ebf8ff; padding: 3px 10px; border-radius: 20px; display: inline-block; margin: 16px 0 10px -14px; position: relative; z-index: 1; }
+  .tl-item { position: relative; padding: 10px 0 10px 16px; border-bottom: 1px dashed #e2e8f0; }
+  .tl-item::before { content: ''; position: absolute; left: -14px; top: 16px; width: 10px; height: 10px; border-radius: 50%; background: #cbd5e0; border: 2px solid #fff; }
+  .tl-item.highlight::before { background: #2563a8; }
+  .tl-item.highlight .tl-title { color: #2563a8; font-weight: 700; }
+  .tl-date { font-size: 11px; color: #a0aec0; margin-bottom: 2px; }
+  .tl-title { font-size: 13px; color: #2d3748; line-height: 1.5; }
+  .tl-cat { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 8px; font-weight: 600; margin-top: 4px; }
+
+  /* 카테고리 색상 */
+  .cat-실적 { background: #bee3f8; color: #2b6cb0; }
+  .cat-글로벌 { background: #c6f6d5; color: #276749; }
+  .cat-제품 { background: #e9d8fd; color: #6b46c1; }
+  .cat-인증 { background: #feebc8; color: #c05621; }
+  .cat-시장성과 { background: #fed7d7; color: #9b2c2c; }
+  .cat-인사조직 { background: #e2e8f0; color: #4a5568; }
+  .cat-인터뷰기고 { background: #fefcbf; color: #975a16; }
+  .cat-IR { background: #b2f5ea; color: #234e52; }
+
+  /* PR 인사이트 */
+  .insight-box { background: #fff; border-radius: 12px; padding: 18px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
+  .insight-num { font-size: 24px; font-weight: 800; color: #2563a8; }
+  .insight-title { font-size: 14px; font-weight: 700; color: #1a202c; margin: 4px 0 8px; }
+  .insight-body { font-size: 13px; color: #4a5568; line-height: 1.7; }
+  .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* 패턴 테이블 */
+  .pattern-list { list-style: none; }
+  .pattern-list li { padding: 10px 0; border-bottom: 1px solid #f0f4f8; font-size: 13px; color: #4a5568; display: flex; gap: 10px; align-items: flex-start; }
+  .pattern-list li::before { content: '→'; color: #2563a8; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .badge-blue { background: #bee3f8; color: #2b6cb0; }
+  .badge-green { background: #c6f6d5; color: #276749; }
+
+  @media (max-width: 640px) {
+    header { padding: 20px 16px; }
+    header h1 { font-size: 18px; }
+    .summary-grid { grid-template-columns: repeat(2, 1fr); }
+    .insight-grid { grid-template-columns: 1fr; }
+    nav a { padding: 11px 9px; font-size: 11px; }
+    h2 { font-size: 16px; }
+    .cat-label { width: 90px; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📊 지니언스 보도자료 분석</h1>
+  <p>2024.01 ~ 2026.06 | 총 58건 | PR 담당자 면접 준비용</p>
+</header>
+
+<nav>
+  <a href="#summary">요약</a>
+  <a href="#trend">트렌드</a>
+  <a href="#category">유형 분석</a>
+  <a href="#timeline">타임라인</a>
+  <a href="#insight">PR 인사이트</a>
+</nav>
+
+<div class="container">
+
+  <!-- 요약 -->
+  <section id="summary">
+    <h2>📌 2년 6개월 한눈에 보기</h2>
+    <div class="summary-grid">
+      <div class="sum-card">
+        <div class="sum-num">58</div>
+        <div class="sum-label">총 보도자료 건수</div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-num">2.0건</div>
+        <div class="sum-label">월평균 발행 수</div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-num">11회</div>
+        <div class="sum-label">글로벌 전시/행사 참가</div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-num">5개</div>
+        <div class="sum-label">신규 진출 국가/지역<br><span style="font-size:10px">(튀르키예·아프리카·싱가포르·인도·인도네시아)</span></div>
+      </div>
+    </div>
+
+    <div class="trend-card">
+      <div class="trend-title">🔑 이 기간을 관통하는 한 문장</div>
+      <div class="trend-body">
+        <strong>NAC 1위 기업에서 글로벌 통합 보안 플랫폼 기업으로의 전환</strong>을 알리는 보도자료가 2년 내내 이어졌다.<br>
+        제품 라인업 확장(EDR → EPP), 지역 확장(중동 → APAC → 아프리카), 사업 모델 확장(제품 → 서비스)이 동시에 진행된 시기.
+      </div>
+    </div>
+  </section>
+
+  <!-- 트렌드 -->
+  <section id="trend">
+    <h2>📈 주요 흐름 6가지</h2>
+
+    <div class="trend-card">
+      <div class="trend-title">① 2024: 글로벌 확장 인프라 구축기</div>
+      <div class="trend-body">
+        <span class="trend-tag">UAE 사무소 개설</span> <span class="trend-tag">나세일 본부장 영입</span> <span class="trend-tag">중동 국책과제 선정</span><br><br>
+        2024년은 글로벌 확장을 위한 <strong>기반 다지기</strong>에 집중. 중동을 첫 거점으로 삼아 UAE 두바이에 사무소를 열고, 시스코 출신 글로벌 사업 전문가를 영입. 자이텍스 두바이에서 EDR을 글로벌 시장에 처음 공개하며 제품 포트폴리오를 글로벌용으로 전환.
+      </div>
+    </div>
+
+    <div class="trend-card green">
+      <div class="trend-title">② 2025 상반기: EDR → EPP 플랫폼 피벗</div>
+      <div class="trend-body">
+        <span class="trend-tag">Insights E 3.0 출시</span> <span class="trend-tag">에티버스 AV 총판</span> <span class="trend-tag">MDR 서비스 진출</span><br><br>
+        EDR 단일 제품에서 <strong>AV + EDR + AR + 매체제어</strong>를 통합한 EPP 플랫폼으로 확장. 동시에 MDR 서비스 사업에 첫 진출하며 제품 판매 → 서비스 모델 전환을 선언. CAIO를 임명하고 AI 트랜스포메이션을 공식 선언.
+      </div>
+    </div>
+
+    <div class="trend-card orange">
+      <div class="trend-title">③ 2025 하반기: 아태(APAC) 확장 가속</div>
+      <div class="trend-body">
+        <span class="trend-tag">인도 GTSC</span> <span class="trend-tag">인도네시아 파트너데이</span> <span class="trend-tag">CYDES 2025</span><br><br>
+        중동에서 검증한 모델을 아태로 확장. 벵갈루루에 글로벌 기술지원센터(GTSC)를 개소하고, 인도네시아·말레이시아·태국 파트너 구축. 아태 전담 전시회 참가(한국 기업 유일).
+      </div>
+    </div>
+
+    <div class="trend-card purple">
+      <div class="trend-title">④ 2025~2026: 실적 V자 반등 → 최대 실적</div>
+      <div class="trend-body">
+        <span class="trend-tag">2Q +77%</span> <span class="trend-tag">3Q +661%</span> <span class="trend-tag">연간 +52.2%</span> <span class="trend-tag">1Q 47배↑</span><br><br>
+        2024년 2분기부터 영업이익 급반등 시작. 2024년 연간 영업이익 98억원(+52.2%), 2026년 1분기 영업이익 47배 성장으로 창사 이래 최대 실적 달성. IR 소통도 병행 강화 — 공동 기업설명회가 4개사 → 9개사 → 12개사로 확대.
+      </div>
+    </div>
+
+    <div class="trend-card red">
+      <div class="trend-title">⑤ 2026: 신기술·신시장 선점 선언</div>
+      <div class="trend-body">
+        <span class="trend-tag">PQC 양자보안</span> <span class="trend-tag">지니안 홈</span> <span class="trend-tag">AV-Comparatives 인증</span><br><br>
+        수익이 안정되자 차세대 성장 동력 선언. 양자내성암호(PQC) 기반 '양자 보안 게이트웨이' 개발 공개, 아파트 홈네트워크 보안 '지니안 홈' 출시로 B2C 시장 진출. 글로벌 EDR 인증(AV-Comparatives) 획득으로 해외 영업 레버리지 확보.
+      </div>
+    </div>
+
+    <div class="trend-card teal">
+      <div class="trend-title">⑥ C레벨 커뮤니케이션이 전략적으로 배치됨</div>
+      <div class="trend-body">
+        <span class="trend-tag">이동범 대표 인터뷰 3회</span> <span class="trend-tag">전자신문 기고</span> <span class="trend-tag">연초·실적 발표 타이밍</span><br><br>
+        대표 인터뷰가 연초(1월), 실적 발표 즈음, 전략 전환 시점에 집중 배치. "시스코와 맞짱", "美 50개 고객", "미래 성장 전략" 등 <strong>공격적 선언형 메시지</strong>를 일관되게 사용. 기고문을 통해 업계 리더십 이미지도 구축.
+      </div>
+    </div>
+  </section>
+
+  <!-- 유형 분석 -->
+  <section id="category">
+    <h2>🗂️ 보도자료 유형별 분포 (58건)</h2>
+
+    <div class="trend-card" style="margin-bottom:20px;">
+      <div class="cat-row">
+        <div class="cat-item">
+          <div class="cat-label">글로벌 전시/행사</div>
+          <div class="cat-bar-wrap"><div class="cat-bar" style="width:34%; background:#2d8a3e;">34%</div></div>
+          <div class="cat-count">20건</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-label">실적/IR</div>
+          <div class="cat-bar-wrap"><div class="cat-bar" style="width:21%; background:#2563a8;">21%</div></div>
+          <div class="cat-count">12건</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-label">제품/기술</div>
+          <div class="cat-bar-wrap"><div class="cat-bar" style="width:16%; background:#805ad5;">16%</div></div>
+          <div class="cat-count">9건</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-label">시장 성과</div>
+          <div class="cat-bar-wrap"><div class="cat-bar" style="width:12%; background:#c53030;">12%</div></div>
+          <div class="cat-count">7건</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-label">인증/수상</div>
+          <div class="cat-bar-wrap"><div class="cat-bar" style="width:9%; background:#dd6b20;">9%</div></div>
+          <div class="cat-count">5건</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-label">인사/조직</div>
+          <div class="cat-bar-wrap"><div class="cat-bar" style="width:5%; background:#718096;">5%</div></div>
+          <div class="cat-count">3건</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-label">C레벨 기고/인터뷰</div>
+          <div class="cat-bar-wrap"><div class="cat-bar" style="width:3%; background:#975a16;">3%</div></div>
+          <div class="cat-count">2건</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="trend-card green">
+      <div class="trend-title">💡 PR 관점 해석</div>
+      <div class="trend-body">
+        글로벌 행사가 34%로 압도적. 전시 참가 전 예고 보도자료 + 성료 후 결과 보도자료 세트로 운영하는 패턴이 일관됨.<br>
+        실적 보도자료(12건)는 분기별 + 연간으로 체계화. 상장사답게 IR과 언론 PR을 동시에 고려한 구성.<br>
+        <strong>C레벨 인터뷰가 2건으로 적어 보이지만</strong>, 실제로는 각 인터뷰가 매체 피처 기사로 길게 다뤄져 임팩트가 큼.
+      </div>
+    </div>
+  </section>
+
+  <!-- 타임라인 -->
+  <section id="timeline">
+    <h2>📅 전체 타임라인</h2>
+
+    <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px;">
+      <span style="font-size:12px; color:#718096;">카테고리 범례:</span>
+      <span class="tl-cat cat-글로벌">글로벌</span>
+      <span class="tl-cat cat-실적">실적</span>
+      <span class="tl-cat cat-제품">제품/기술</span>
+      <span class="tl-cat cat-시장성과">시장성과</span>
+      <span class="tl-cat cat-인증">인증/수상</span>
+      <span class="tl-cat cat-인사조직">인사/조직</span>
+      <span class="tl-cat cat-인터뷰기고">인터뷰/기고</span>
+      <span class="tl-cat cat-IR">IR</span>
+    </div>
+
+    <div class="timeline">
+
+      <div class="tl-year">2026</div>
+
+      <div class="tl-item highlight">
+        <div class="tl-date">2026.06.29</div>
+        <div class="tl-title">버그바운티 상반기 결과 — 취약점 접수 +129%, 포상금 +1,046%</div>
+        <span class="tl-cat cat-제품">제품/기술</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2026.06.22</div>
+        <div class="tl-title">[전자신문 기고] "정보보안 전문가, 언제 유망해지나?" — 이동범 대표</div>
+        <span class="tl-cat cat-인터뷰기고">인터뷰/기고</span>
+      </div>
+      <div class="tl-item highlight">
+        <div class="tl-date">2026.06.17</div>
+        <div class="tl-title">EDR AV-Comparatives 글로벌 인증 획득 — 전 세계 9개 솔루션 중 국내 유일</div>
+        <span class="tl-cat cat-인증">인증/수상</span>
+      </div>
+      <div class="tl-item highlight">
+        <div class="tl-date">2026.05.26</div>
+        <div class="tl-title">양자 보안 게이트웨이(PQC) 원천기술 개발 — 4.7조원 시장 진출 선언</div>
+        <span class="tl-cat cat-제품">제품/기술</span>
+      </div>
+      <div class="tl-item highlight">
+        <div class="tl-date">2026.05.15</div>
+        <div class="tl-title">1Q 창사 최대 실적 — 매출 117.4억(+25.5%), 영업이익 47배 급증</div>
+        <span class="tl-cat cat-실적">실적</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2026.04.28</div>
+        <div class="tl-title">EDR 공공 조달 시장 7년 연속 1위 — 점유율 46%, 75만 에이전트</div>
+        <span class="tl-cat cat-시장성과">시장성과</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2026.04.07</div>
+        <div class="tl-title">글로벌 고객 200곳 돌파 — 36개국·81개 파트너</div>
+        <span class="tl-cat cat-시장성과">시장성과</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2026.03.20</div>
+        <div class="tl-title">RSAC 2026 참가 (12년 연속) — 'Compliance Velocity' 키워드</div>
+        <span class="tl-cat cat-글로벌">글로벌</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2026.03.05</div>
+        <div class="tl-title">2026 파트너데이 — EPP 시장 확대·MDR 서비스 전략 공유</div>
+        <span class="tl-cat cat-글로벌">글로벌</span>
+      </div>
+      <div class="tl-item highlight">
+        <div class="tl-date">2026.02.27</div>
+        <div class="tl-title">싱가포르 첫 고객 확보 — APAC 확대 신호탄 (14개 매체 보도)</div>
+        <span class="tl-cat cat-시장성과">시장성과</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2026.02.09</div>
+        <div class="tl-title">버그바운티 전 제품·서비스로 확대 — VDP·CVD 연계</div>
+        <span class="tl-cat cat-제품">제품/기술</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2026.01.29</div>
+        <div class="tl-title">지니안 홈 출시 — 홈네트워크 세대간 망분리 (VPN+VLAN)</div>
+        <span class="tl-cat cat-제품">제품/기술</span>
+      </div>
+
+      <div class="tl-year">2025</div>
+
+      <div class="tl-item">
+        <div class="tl-date">2025.12.08</div>
+        <div class="tl-title">블랙햇 MEA 2025 (사우디 리야드) — 파키스탄 금융권·사우디 국가기관 상담</div>
+        <span class="tl-cat cat-글로벌">글로벌</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025.12.01</div>
+        <div class="tl-title">대한민국 일·생활 균형 우수기업 선정 — 유연근무 100%, 연차소진 98%</div>
+        <span class="tl-cat cat-인증">인증/수상</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025.11.25</div>
+        <div class="tl-title">글로벌 파트너·솔루션 데이 (인도네시아 자카르타) — 아태 공략 강화</div>
+        <span class="tl-cat cat-글로벌">글로벌</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025.11.18</div>
+        <div class="tl-title">K보안 12개사 공동 기업설명회 — 유안타증권 후원 역대 최다 규모</div>
+        <span class="tl-cat cat-IR">IR</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025.10.20</div>
+        <div class="tl-title">자이텍스 두바이 2025 성료 — UAE 사무소·국책과제 기반으로 현지화 가속</div>
+        <span class="tl-cat cat-글로벌">글로벌</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025.10.01</div>
+        <div class="tl-title">에티버스와 안티바이러스 총판 계약 — 국내 백신 시장 진출</div>
+        <span class="tl-cat cat-시장성과">시장성과</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025.09.28</div>
+        <div class="tl-title">이동범 대표 인터뷰 "美 공략 강화, 사이버보안 빅2 될 것"</div>
+        <span class="tl-cat cat-인터뷰기고">인터뷰/기고</span>
+      </div>
+      <div class="tl-item highlight">
+        <div class="tl-date">2025.09.26</div>
+        <div class="tl-title">한국IR대상 IR우수기업 선정 — 시가총액 143% 성장 (업계 최고)</div>
+        <span class="tl-cat cat-인증">인증/수상</span>
+      </div>
+      <div class="tl-item highlight">
+        <div class="tl-date">2025.08.19</div>
+        <div class="tl-title">지니안 인사이츠 E 3.0 출시 — AV+EDR+AR+매체제어 단일 에이전트 통합 (EPP)</div>
+        <span class="tl-cat cat-제품">제품/기술</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025.08.08</div>
+        <div class="tl-title">코스닥 라이징스타 3년 연속 선정 (한국거래소)</div>
+        <span class="tl-cat cat-인증">인증/수상</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025.07.04</div>
+        <div class="tl-title">CYDES 2025 (말레이시아) 참가 — 아태 한국기업 유일</div>
+        <span class="tl-cat cat-글로벌">글로벌</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025.06.27</div>
+        <div class="tl-title">정보보호 자율 공시 시행 — 보안 전문기업 책임감으로 선제 공개</div>
+        <span class="tl-cat cat-제품">제품/기술</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025.06.19</div>
+        <div class="tl-title">K보안 9개사 공동 기업설명회 (유안타증권)</div>
+        <span class="tl-cat cat-IR">IR</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025.05.12</div>
+        <div class="tl-title">사이버 위협 분석 보고서 영문판 정식 발간 — 글로벌 CTI 역량 알리기</div>
+        <span class="tl-cat cat-제품">제품/기술</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025.04.29</div>
+        <div class="tl-title">GISEC Global 2025 (두바이) — 사우디 공공기관 EDR 글로벌 첫 고객</div>
+        <span class="tl-cat cat-글로벌">글로벌</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025.04.22</div>
+        <div class="tl-title">RSAC 2025 (샌프란시스코) — 'Zero Network Changes' 메시지</div>
+        <span class="tl-cat cat-글로벌">글로벌</span>
+      </div>
+      <div class="tl-item highlight">
+        <div class="tl-date">2025.03.25</div>
+        <div class="tl-title">인도 벵갈루루 글로벌 기술지원센터(GTSC) 개소</div>
+        <span class="tl-cat cat-인사조직">인사/조직</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025.03.06</div>
+        <div class="tl-title">[기획기사] K보안, 중동·아프리카서 '모래바람' — 두바이 사무소·고객 2→50곳</div>
+        <span class="tl-cat cat-인터뷰기고">인터뷰/기고</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025.03.05</div>
+        <div class="tl-title">AI 트랜스포메이션 추진 선언 — CAIO 임명·실리콘밸리 PM 모집</div>
+        <span class="tl-cat cat-인사조직">인사/조직</span>
+      </div>
+      <div class="tl-item highlight">
+        <div class="tl-date">2025.02.27</div>
+        <div class="tl-title">MDR 서비스 사업 본격 진출 — 중소기업 대상 매니지드 보안 서비스</div>
+        <span class="tl-cat cat-제품">제품/기술</span>
+      </div>
+      <div class="tl-item highlight">
+        <div class="tl-date">2025.02.19</div>
+        <div class="tl-title">2024년 연간 최대 실적 — 매출 496억(+15.7%), 영업이익 98억(+52.2%), 20년 연속 흑자</div>
+        <span class="tl-cat cat-실적">실적</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025.02.11</div>
+        <div class="tl-title">사우디 LEAP 2025 — 네이버클라우드와 MOU, 중동 공략 가속</div>
+        <span class="tl-cat cat-글로벌">글로벌</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025.01.23</div>
+        <div class="tl-title">EDR 누적 고객 200곳 돌파 — 중동 글로벌 론칭 성과</div>
+        <span class="tl-cat cat-시장성과">시장성과</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025.01.08</div>
+        <div class="tl-title">제로트러스트 글로벌 수주 — 북미·중미·남미·중동 10여곳 확보</div>
+        <span class="tl-cat cat-시장성과">시장성과</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2025.01.07</div>
+        <div class="tl-title">이동범 대표 인터뷰 "시스코와 맞짱 뜨는 글로벌 보안회사 될 것"</div>
+        <span class="tl-cat cat-인터뷰기고">인터뷰/기고</span>
+      </div>
+
+      <div class="tl-year">2024</div>
+
+      <div class="tl-item">
+        <div class="tl-date">2024.12.09</div>
+        <div class="tl-title">K보안 4개사 공동 기업설명회 (NH투자증권) — 첫 공동 IR</div>
+        <span class="tl-cat cat-IR">IR</span>
+      </div>
+      <div class="tl-item highlight">
+        <div class="tl-date">2024.11.14</div>
+        <div class="tl-title">3Q 영업이익 661%↑ — 매출 104억(+35%), 클라우드 NAC 확장</div>
+        <span class="tl-cat cat-실적">실적</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2024.11.06</div>
+        <div class="tl-title">시스코 출신 나세일 해외사업 본부장 영입 — 글로벌 확장 가속화</div>
+        <span class="tl-cat cat-인사조직">인사/조직</span>
+      </div>
+      <div class="tl-item highlight">
+        <div class="tl-date">2024.10.18</div>
+        <div class="tl-title">UAE 두바이 신규 사무소 개설 — 인터넷시티 NIPA 입주</div>
+        <span class="tl-cat cat-인사조직">인사/조직</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2024.10.10</div>
+        <div class="tl-title">자이텍스 두바이 2024 — EDR 글로벌 첫 공개</div>
+        <span class="tl-cat cat-글로벌">글로벌</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2024.09.30</div>
+        <div class="tl-title">튀르키예 첫 고객 확보 — 자동차 부품 제조사에 NAC 공급</div>
+        <span class="tl-cat cat-시장성과">시장성과</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2024.08.30</div>
+        <div class="tl-title">코스닥 라이징스타 2년 연속 선정</div>
+        <span class="tl-cat cat-인증">인증/수상</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2024.08.28</div>
+        <div class="tl-title">38억 규모 사이버보안 국제협력 국책과제 선정 — UAE·사우디 수요기관</div>
+        <span class="tl-cat cat-시장성과">시장성과</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2024.08.19</div>
+        <div class="tl-title">아프리카 금융기관 NAC 신규 고객 확보 — 글로벌 커버리지 확장</div>
+        <span class="tl-cat cat-시장성과">시장성과</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2024.08.01</div>
+        <div class="tl-title">2Q 영업이익 18.6억(+77%) — NAC·EDR 동반 성장</div>
+        <span class="tl-cat cat-실적">실적</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2024.07.15</div>
+        <div class="tl-title">제로트러스트 도입 시범사업 수주 — 정부 제로트러스트 확산 정책 연계</div>
+        <span class="tl-cat cat-시장성과">시장성과</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2024.06.06</div>
+        <div class="tl-title">이동범 대표 인터뷰 "NAC로 美 50개 이상 고객사 확보"</div>
+        <span class="tl-cat cat-인터뷰기고">인터뷰/기고</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2024.05.21</div>
+        <div class="tl-title">버그바운티 신고 방식 일원화 — 해외 신고 비중 70%, 총 546건 접수</div>
+        <span class="tl-cat cat-제품">제품/기술</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2024.05.02</div>
+        <div class="tl-title">RSAC 2024 (샌프란시스코) — 제로트러스트 글로벌 공략</div>
+        <span class="tl-cat cat-글로벌">글로벌</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2024.04.23</div>
+        <div class="tl-title">이화여대 의료원에 EDR 공급 — 가시성·통합관리 높은 평가</div>
+        <span class="tl-cat cat-시장성과">시장성과</span>
+      </div>
+      <div class="tl-item highlight">
+        <div class="tl-date">2024.04.12</div>
+        <div class="tl-title">제로트러스트 2.0 전략 발표 + VPN 전문기업 퓨쳐텍 인수 결정</div>
+        <span class="tl-cat cat-제품">제품/기술</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2024.03.29</div>
+        <div class="tl-title">E1(LPG기업)에 EDR 공급</div>
+        <span class="tl-cat cat-시장성과">시장성과</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2024.03.12</div>
+        <div class="tl-title">글로벌 신규 수주 잇따라 — 주정부·금융·의료·방산·항공·유통</div>
+        <span class="tl-cat cat-글로벌">글로벌</span>
+      </div>
+      <div class="tl-item highlight">
+        <div class="tl-date">2024.03.06</div>
+        <div class="tl-title">2023년 최대 실적 — 매출 429억(+11.5%), 19년 연속 흑자 / 글로벌 턴어라운드 기대</div>
+        <span class="tl-cat cat-실적">실적</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">2024.03.04</div>
+        <div class="tl-title">2024 파트너데이 — 57개사 참석, 제로트러스트·클라우드 전략 공유</div>
+        <span class="tl-cat cat-글로벌">글로벌</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PR 인사이트 -->
+  <section id="insight">
+    <h2>💡 PR 담당자 관점 핵심 인사이트</h2>
+
+    <div class="insight-grid">
+      <div class="insight-box">
+        <div class="insight-num">①</div>
+        <div class="insight-title">전시 보도자료는 항상 세트로</div>
+        <div class="insight-body">모든 글로벌 전시가 <strong>사전 예고 + 성료 결과</strong> 두 편으로 발행됨. 사전편은 "무엇을 보여줄지", 결과편은 "상담 건수·반응"으로 성과 수치화. 이 패턴을 면접에서 언급하면 보도자료 전략을 이해한다는 인상을 줄 수 있음.</div>
+      </div>
+      <div class="insight-box">
+        <div class="insight-num">②</div>
+        <div class="insight-title">C레벨 인터뷰 타이밍이 전략적</div>
+        <div class="insight-body">이동범 대표 인터뷰는 <strong>연초(1월), 글로벌 실적 반등 시점, 전략 전환 선언 시점</strong>에 집중. 임의로 하는 게 아니라 비즈니스 사이클과 연동된 계획 PR. 지니언스 PR팀이 전략적 기획을 한다는 증거.</div>
+      </div>
+      <div class="insight-box">
+        <div class="insight-num">③</div>
+        <div class="insight-title">보도 매체 수가 임팩트 지표</div>
+        <div class="insight-body">싱가포르 첫 고객 보도자료 한 건에 <strong>14개 매체</strong>가 보도. 글로벌 고객 200곳 돌파는 더 많음. 같은 내용이라도 배포 전략·기자 관계에 따라 커버리지가 달라진다는 걸 보여주는 사례.</div>
+      </div>
+      <div class="insight-box">
+        <div class="insight-num">④</div>
+        <div class="insight-title">외부 이슈와 메시지 연결</div>
+        <div class="insight-body">미토스 AI 이슈 → EDR 수요 증가로 연결, 월패드 해킹 → 지니안 홈 출시로 연결, 개인정보보호법 강화 → 지니언스 솔루션 필요성으로 연결. <strong>외부 뉴스를 자사 메시지에 올라타는 타이밍 PR</strong>이 일관됨.</div>
+      </div>
+      <div class="insight-box">
+        <div class="insight-num">⑤</div>
+        <div class="insight-title">공동 IR이 점점 커짐</div>
+        <div class="insight-body">2024.12 4개사 → 2025.06 9개사 → 2025.11 12개사. 지니언스가 K보안 업계 IR 연대를 주도하는 포지셔닝. <strong>PR팀이 IR 지원만 하는 게 아니라 업계 이슈를 함께 만드는 역할</strong>을 함.</div>
+      </div>
+      <div class="insight-box">
+        <div class="insight-num">⑥</div>
+        <div class="insight-title">수치가 있는 보도자료가 더 많이 퍼짐</div>
+        <div class="insight-body">"영업이익 47배", "661% 증가", "14개 매체", "75만 에이전트", "36개국 81개 파트너" — 모든 주요 보도자료에 <strong>구체적 숫자</strong>가 들어감. 기자가 그대로 쓸 수 있는 수치 제공이 지니언스 보도자료의 특징.</div>
+      </div>
+    </div>
+
+    <div class="trend-card" style="margin-top:16px;">
+      <div class="trend-title">📝 면접에서 쓸 수 있는 말</div>
+      <div class="trend-body">
+        "보도자료를 훑어보니 지니언스는 전시 참가를 사전+성료 두 편으로 운영하고, C레벨 인터뷰를 비즈니스 사이클에 맞춰 전략적으로 배치하더라고요. 외부 이슈(미토스, 월패드 해킹 등)를 자사 메시지에 연결하는 타이밍 PR도 일관되게 보였습니다. 이런 방식으로 PR을 운영하는 팀에서 배우고 싶었습니다."
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 70) current = s.id; });
+    navLinks.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + current); });
+  });
+</script>
+</body>
+</html>

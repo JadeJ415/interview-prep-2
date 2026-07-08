@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>면접 심층전략 | 정세진 × 지니언스</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Malgun Gothic','Apple SD Gothic Neo',sans-serif;background:#f0f4f8;color:#1a202c}
+
+header{background:linear-gradient(135deg,#0f2a4a,#1a3a5f,#1e4d8c);color:#fff;padding:24px 16px 20px}
+header h1{font-size:19px;font-weight:800}
+header p{font-size:12px;opacity:.75;margin-top:4px}
+
+.tab-wrap{background:#fff;border-bottom:2px solid #e2e8f0;display:flex;overflow-x:auto;scrollbar-width:none}
+.tab-wrap::-webkit-scrollbar{display:none}
+.tab{padding:12px 15px;font-size:12px;font-weight:700;color:#718096;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.2s}
+.tab.active{color:#1a3a5f;border-bottom-color:#1a3a5f}
+
+.sec{display:none;padding:14px;max-width:700px;margin:0 auto}
+.sec.active{display:block}
+
+/* 공통 */
+.card{background:#fff;border-radius:13px;box-shadow:0 2px 8px rgba(0,0,0,.07);padding:16px 18px;margin-bottom:12px}
+.card-title{font-size:14px;font-weight:800;color:#1a202c;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.tag{font-size:10px;font-weight:700;padding:2px 9px;border-radius:10px;display:inline-block}
+.t-red{background:#fee2e2;color:#991b1b}
+.t-blue{background:#dbeafe;color:#1d4ed8}
+.t-green{background:#d1fae5;color:#065f46}
+.t-purple{background:#ede9fe;color:#5b21b6}
+.t-yellow{background:#fef3c7;color:#92400e}
+.t-navy{background:#e0e7ff;color:#3730a3}
+.body-text{font-size:13px;color:#374151;line-height:1.8}
+.sub-title{font-size:12px;font-weight:800;color:#1a3a5f;margin:12px 0 6px;padding-left:8px;border-left:3px solid #2563a8}
+.highlight{background:#eff6ff;border-radius:8px;padding:10px 13px;font-size:12px;color:#1e3a5f;line-height:1.75;margin-top:8px}
+.warn{background:#fff7ed;border-radius:8px;padding:10px 13px;font-size:12px;color:#92400e;line-height:1.75;margin-top:8px}
+.good{background:#f0fdf4;border-radius:8px;padding:10px 13px;font-size:12px;color:#14532d;line-height:1.75;margin-top:8px}
+divider{display:block;height:1px;background:#f0f4f8;margin:10px 0}
+
+/* 포지셔닝 */
+.position-box{background:linear-gradient(135deg,#1a3a5f,#2563a8);border-radius:13px;padding:20px;color:#fff;margin-bottom:12px;text-align:center}
+.position-box h2{font-size:17px;font-weight:800;margin-bottom:8px}
+.position-box p{font-size:13px;opacity:.85;line-height:1.8}
+
+/* JD 매핑 */
+.map-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.map-cell{border-radius:9px;padding:10px 12px;font-size:12px;line-height:1.6}
+.map-jd{background:#f0f4f8;color:#374151}
+.map-me{background:#eff6ff;color:#1e3a5f}
+.map-label{font-size:10px;font-weight:800;margin-bottom:4px;opacity:.7}
+.strength-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #f0f4f8}
+.strength-row:last-child{border:none}
+.str-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.str-body{flex:1}
+.str-title{font-size:13px;font-weight:700;color:#1a202c}
+.str-desc{font-size:11px;color:#718096;margin-top:2px;line-height:1.5}
+
+/* 포트폴리오 전략 */
+.pf-card{border-radius:11px;border:1.5px solid #e2e8f0;padding:13px 15px;margin-bottom:10px;cursor:pointer}
+.pf-header{display:flex;align-items:center;gap:8px}
+.pf-num{width:24px;height:24px;background:#1a3a5f;color:#fff;border-radius:6px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pf-title{font-size:13px;font-weight:800;color:#1a202c;flex:1;line-height:1.4}
+.pf-body{display:none;margin-top:10px;padding-top:10px;border-top:1px solid #f0f4f8}
+.pf-body.open{display:block}
+.pf-item{font-size:12px;color:#374151;line-height:1.8;padding-left:12px;position:relative}
+.pf-item::before{content:'▸';position:absolute;left:0;color:#2563a8}
+
+/* 위기 대응 */
+.crisis-card{border-radius:11px;margin-bottom:10px;overflow:hidden;border:1.5px solid #fee2e2}
+.crisis-q{background:#fff5f5;padding:12px 14px;display:flex;align-items:center;gap:8px;cursor:pointer}
+.crisis-q-text{font-size:13px;font-weight:700;color:#991b1b;flex:1;line-height:1.4}
+.crisis-a{display:none;padding:12px 14px;background:#fff}
+.crisis-a.open{display:block}
+.answer-box{background:#f0fdf4;border-radius:8px;padding:11px 13px;font-size:12px;color:#14532d;line-height:1.85}
+.strategy-box{background:#eff6ff;border-radius:8px;padding:9px 12px;font-size:11px;color:#1e3a5f;margin-top:8px;font-weight:700}
+
+/* 면접 흐름 */
+.flow-item{display:flex;gap:12px;margin-bottom:14px}
+.flow-num{width:34px;height:34px;background:#1a3a5f;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
+.flow-body{flex:1}
+.flow-title{font-size:14px;font-weight:800;color:#1a202c}
+.flow-sub{font-size:11px;color:#a0aec0;margin-bottom:6px}
+.flow-desc{font-size:12px;color:#374151;line-height:1.75}
+
+/* 질문 전략 */
+.q-item{padding:10px 13px;border-radius:9px;background:#eff6ff;margin-bottom:8px;font-size:13px;color:#1e3a5f;line-height:1.6;border-left:3px solid #2563a8}
+.q-why{font-size:11px;color:#718096;margin-top:4px}
+
+@media(max-width:640px){
+  .map-row{grid-template-columns:1fr}
+  header h1{font-size:16px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎯 지니언스 면접 심층전략</h1>
+  <p>정세진 × JD·이력서·포트폴리오 7종 통합 분석</p>
+</header>
+
+<div class="tab-wrap">
+  <div class="tab active" onclick="showTab('positioning')">📌 포지셔닝</div>
+  <div class="tab" onclick="showTab('jdmap')">📋 JD 매핑</div>
+  <div class="tab" onclick="showTab('portfolio')">📁 포트폴리오</div>
+  <div class="tab" onclick="showTab('crisis')">⚡ 위기 대응</div>
+  <div class="tab" onclick="showTab('flow')">🗂 면접 흐름</div>
+  <div class="tab" onclick="showTab('questions')">💬 역질문</div>
+</div>
+
+<!-- ── 포지셔닝 ── -->
+<div class="sec active" id="tab-positioning">
+
+  <div class="position-box">
+    <h2>"기술을 비즈니스 언어로 번역해온 PR 기획자"</h2>
+    <p>대행사 → 인하우스 → 지니언스.<br>IT 기술의 가치를 언론·투자자·고객에게 전달해온 5년의 경험을 보안 도메인으로 확장합니다.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏆 나만의 차별점 3가지</div>
+    <div class="strength-row">
+      <div class="str-icon" style="background:#dbeafe">✍️</div>
+      <div class="str-body">
+        <div class="str-title">보도자료부터 CEO 인터뷰까지 전 포맷을 직접 쓴다</div>
+        <div class="str-desc">보도자료 4건·CEO 인터뷰 2건·기획기사 1건. 포맷별 뉴스 가치 설계 능력 보유. 지니언스가 JD에서 "보도자료 3건 필수"를 요구한 이유와 정확히 맞아 떨어짐.</div>
+      </div>
+    </div>
+    <div class="strength-row">
+      <div class="str-icon" style="background:#d1fae5">🌐</div>
+      <div class="str-body">
+        <div class="str-title">글로벌 IT PR을 몸으로 경험했다</div>
+        <div class="str-desc">브라이먼(NVIDIA·Cloudera·Infobip) 인턴 → 네오다임(Adobe·AWS·Databricks) 캠페인 → 다리소프트 CES 2025·뉴욕시·포르투갈 브리사 보도자료. 지니언스 RSAC·자이텍스 글로벌 PR과 즉시 연결 가능한 배경.</div>
+      </div>
+    </div>
+    <div class="strength-row">
+      <div class="str-icon" style="background:#ede9fe">📊</div>
+      <div class="str-body">
+        <div class="str-title">PR 효과를 데이터로 말할 수 있다</div>
+        <div class="str-desc">Google Analytics·GAIQ·SQL·Python 204hrs. CEO 인터뷰 후 지자체 연락, 보도자료 후 투자자 피드백이라는 정성+정량 성과를 제시 가능. 상장사 IR 연계 PR에서 차별화.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎭 경쟁자와 비교했을 때 나의 위치</div>
+    <div class="body-text">
+      <div class="sub-title">보안 전문 PR 출신 지원자 대비</div>
+      <div class="good">✓ 그들은 도메인은 있지만 포맷(CEO 인터뷰·기획기사·글로벌 보도자료)이 좁을 수 있음<br>✓ 나는 IT 기술을 비즈니스 언어로 번역한 경험이 있어 보안 기술도 같은 방식으로 소화 가능<br>✓ 실제로 보안 기사와 지니언스 보도자료 50건을 분석해 메시지 패턴을 이미 파악함</div>
+      <div class="sub-title">종합 마케팅 출신 지원자 대비</div>
+      <div class="good">✓ 나는 마케터가 아니라 인하우스 PR 기획자. 보도자료·인터뷰·기획기사 직접 작성 경험이 명확<br>✓ CEO 인터뷰 후 지자체 연락, IR 피드백 등 PR→영업 전환 임팩트를 측정한 경험 보유</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💡 면접에서 반복해서 심어야 할 핵심 메시지</div>
+    <div class="highlight">
+      "저는 기술을 이해하고 그것을 뉴스로 만드는 사람입니다.<br>
+      AI 스타트업에서 도로 센서 기술을 동아일보·공학저널·뉴욕시 언론에 담았고,<br>
+      이제 그 역량을 보안 도메인에서 발휘하고 싶습니다."
+    </div>
+  </div>
+
+</div>
+
+<!-- ── JD 매핑 ── -->
+<div class="sec" id="tab-jdmap">
+
+  <div class="card">
+    <div class="card-title">📋 JD 요건 vs 내 경험 1:1 매핑</div>
+
+    <div class="map-row">
+      <div class="map-cell map-jd"><div class="map-label">JD 요구사항</div>보도자료 기획·작성·배포</div>
+      <div class="map-cell map-me"><div class="map-label">내 경험</div>보도자료 4건 직접 작성·배포 (CES 2025, AI+ 인증, 브리사 그룹, 뉴욕시 교통국). 뉴스와이어 배포 + 개별 기자 연락 병행.</div>
+    </div>
+    <div class="map-row">
+      <div class="map-cell map-jd"><div class="map-label">JD 요구사항</div>대표·임원 인터뷰 기획·관리</div>
+      <div class="map-cell map-me"><div class="map-label">내 경험</div>CEO 인터뷰 2건 직접 기획·작성 (동아일보/IT동아, 공학저널). 인터뷰 준비 자료→배석→기사 확인까지 전 과정 담당.</div>
+    </div>
+    <div class="map-row">
+      <div class="map-cell map-jd"><div class="map-label">JD 요구사항</div>미디어 행사 기획·운영</div>
+      <div class="map-cell map-me"><div class="map-label">내 경험</div>CES 2025 전시 기획·운영 (부스 홍보·현장 운영·보도자료 세트). 국내 전시회 다수 운영. 네오다임에서 컨퍼런스·세미나 캠페인 기획.</div>
+    </div>
+    <div class="map-row">
+      <div class="map-cell map-jd"><div class="map-label">JD 요구사항</div>이슈 모니터링</div>
+      <div class="map-cell map-me"><div class="map-label">내 경험</div>언론 보도·산업 동향·경쟁사 콘텐츠 모니터링 현직 업무. Google Alerts, 네이버 알림 운영.</div>
+    </div>
+    <div class="map-row">
+      <div class="map-cell map-jd"><div class="map-label">JD 요구사항</div>IR 커뮤니케이션 지원</div>
+      <div class="map-cell map-me"><div class="map-label">내 경험</div>IR Deck 직접 작성. 보도자료 후 투자자 긍정 피드백 경험. 상장사 구조(공시 타이밍·투자자 향 언어)는 배워가겠다고 솔직하게 답변.</div>
+    </div>
+    <div class="map-row">
+      <div class="map-cell map-jd"><div class="map-label">JD 요구사항</div>미디어 네트워크 보유 (우대)</div>
+      <div class="map-cell map-me"><div class="map-label">내 경험</div>배포 서비스 중심이었으나 기사 자주 쓰는 기자 개별 연락, 인터뷰 요청 기자와 직접 소통 관계 구축. 지니언스 커버 매체·기자 사전 파악 완료.</div>
+    </div>
+    <div class="map-row">
+      <div class="map-cell map-jd"><div class="map-label">JD 요구사항</div>보도자료 3건 포트폴리오 필수 제출</div>
+      <div class="map-cell map-me"><div class="map-label">내 경험</div>4건 보도자료 + CEO 인터뷰 2건 + 기획기사 1건 = 총 7건. 브리사 그룹(유럽), 뉴욕시, CES 2025 등 글로벌 이슈 포함.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚠️ 솔직한 약점 분석 (숨기지 말고 미리 준비)</div>
+    <div class="strength-row">
+      <div class="str-icon" style="background:#fee2e2">🔒</div>
+      <div class="str-body">
+        <div class="str-title">보안 업계 도메인 없음</div>
+        <div class="str-desc">약점이지만 치명적이지 않음. 다리소프트에서도 AI 도로 기술을 처음부터 배워 동아일보·공학저널에 기사 냈음. 같은 패턴으로 보안도 흡수 가능. 이미 NAC·EDR·ZTNA·PQC 공부 완료.</div>
+      </div>
+    </div>
+    <div class="strength-row">
+      <div class="str-icon" style="background:#fee2e2">📡</div>
+      <div class="str-body">
+        <div class="str-title">보안 전문 기자 네트워크 없음</div>
+        <div class="str-desc">배포 서비스 중심이었음을 인정. 하지만 좋은 자료가 관계를 만든다는 원칙으로, 지니언스 기자 커버리지 파악 후 입사 즉시 접촉 시작할 것이라고 구체적 계획 제시.</div>
+      </div>
+    </div>
+    <div class="strength-row">
+      <div class="str-icon" style="background:#fee2e2">🏢</div>
+      <div class="str-body">
+        <div class="str-title">상장사 IR PR 경험 없음</div>
+        <div class="str-desc">IR Deck 작성, 투자자 커뮤니케이션 경험 있음. 공시 연동·타이밍 관리는 배워가겠다고 솔직히 인정. 오히려 학습 의지로 전환.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── 포트폴리오 전략 ── -->
+<div class="sec" id="tab-portfolio">
+
+  <div class="card">
+    <div class="card-title">📁 포트폴리오 7종 — 면접 활용 전략</div>
+    <div class="body-text" style="font-size:12px;color:#718096;margin-bottom:12px">각 항목을 눌러 "이 자료를 언제·어떻게 꺼낼지" 전략을 확인하세요.</div>
+
+    <div class="pf-card" onclick="togglePf(this)">
+      <div class="pf-header">
+        <div class="pf-num">01</div>
+        <div><span class="tag t-purple">CEO 인터뷰</span></div>
+        <div class="pf-title">다리소프트 대표 인터뷰 — 동아일보/IT동아 (2026.01)</div>
+      </div>
+      <div class="pf-body">
+        <div class="pf-item"><b>어떤 자료:</b> 경북대×SKT 창업도약패키지 연계. 자율주행·AI 도로관리 스토리. 동아닷컴 게재.</div>
+        <div class="pf-item"><b>면접에서 언제:</b> "CEO 인터뷰 기획·관리 경험 있나요?" 또는 "보도자료 외 PR 경험?" 질문 시.</div>
+        <div class="pf-item"><b>포인트:</b> 단순 인터뷰 섭외가 아니라 메시지 설계→질문 리스트→배석→기사 확인까지 전 과정을 담당했음을 강조. 이 기사 나간 후 지자체에서 연락이 왔다는 임팩트까지 연결.</div>
+        <div class="pf-item"><b>지니언스 연결:</b> "지니언스 대표님 기고·인터뷰처럼 기술 리더십을 언론에 포지셔닝하는 방식을 이미 해본 경험입니다."</div>
+      </div>
+    </div>
+
+    <div class="pf-card" onclick="togglePf(this)">
+      <div class="pf-header">
+        <div class="pf-num">02</div>
+        <div><span class="tag t-purple">CEO 인터뷰</span></div>
+        <div class="pf-title">도로 AI 탐지 기술 — 공학저널 (2024.12)</div>
+      </div>
+      <div class="pf-body">
+        <div class="pf-item"><b>어떤 자료:</b> 기술 전문지 대상 ARA-30 AI 분석장치 상세 기술 인터뷰. 기술 설명 + 시장 맥락 + 비전 구조.</div>
+        <div class="pf-item"><b>면접에서 언제:</b> "기술적인 내용을 언론에 소개한 경험?" 또는 보안 기술 이해도 질문 시.</div>
+        <div class="pf-item"><b>포인트:</b> AI 분석, 엣지 디바이스, 클라우드 플랫폼 같은 기술 용어를 공학 전문지 독자 수준으로 정확히 번역했음. 보안 기술(NAC·EDR)도 같은 방식 가능.</div>
+        <div class="pf-item"><b>지니언스 연결:</b> "EDR·ZTNA 같은 보안 기술도 독자층에 맞게 번역하는 것이 제가 해온 일입니다."</div>
+      </div>
+    </div>
+
+    <div class="pf-card" onclick="togglePf(this)">
+      <div class="pf-header">
+        <div class="pf-num">03</div>
+        <div><span class="tag t-navy">기획기사</span></div>
+        <div class="pf-title">해빙기 포트홀 AI 탐지 — 국토교통뉴스 (2026.02)</div>
+      </div>
+      <div class="pf-body">
+        <div class="pf-item"><b>어떤 자료:</b> 보도자료가 아닌 기획기사. 계절성 이슈(해빙기)를 기회로 포착해 주도적으로 기획·제안한 기사.</div>
+        <div class="pf-item"><b>면접에서 언제:</b> "스스로 PR 기회를 발굴한 경험?" 또는 기획력 관련 질문 시.</div>
+        <div class="pf-item"><b>포인트:</b> 보도자료 배포가 아니라 매체에 직접 기획·제안한 기사. 이슈를 먼저 만드는 PR의 능동적 역할을 보여줌.</div>
+        <div class="pf-item"><b>지니언스 연결:</b> "RSAC나 블랙햇 MEA 같은 행사 전후로 이슈를 먼저 만들어 내는 PR 기획을 드릴 수 있습니다."</div>
+      </div>
+    </div>
+
+    <div class="pf-card" onclick="togglePf(this)">
+      <div class="pf-header">
+        <div class="pf-num">04</div>
+        <div><span class="tag t-blue">보도자료</span></div>
+        <div class="pf-title">CES 2025 마음AI AIoT — 뉴스와이어 (2025.01)</div>
+      </div>
+      <div class="pf-body">
+        <div class="pf-item"><b>어떤 자료:</b> 글로벌 전시 연계 보도자료. 마음AI 협업, ASR·sLLM·TTS 기술 설명, 글로벌 확장 스토리.</div>
+        <div class="pf-item"><b>면접에서 언제:</b> 전시 PR 경험, 협업 보도자료 경험 질문 시. 포트폴리오 제출 시 대표 1번으로.</div>
+        <div class="pf-item"><b>포인트:</b> 전시 전 예고→현장 현황→사후 성료 세트가 갖춰진 보도자료. 지니언스가 RSAC·자이텍스에서 쓰는 패턴과 동일.</div>
+        <div class="pf-item"><b>지니언스 연결:</b> "지니언스의 RSAC 보도자료 패턴을 보고, 제가 CES에서 한 방식과 같다는 걸 알았습니다."</div>
+      </div>
+    </div>
+
+    <div class="pf-card" onclick="togglePf(this)">
+      <div class="pf-header">
+        <div class="pf-num">05</div>
+        <div><span class="tag t-blue">보도자료</span></div>
+        <div class="pf-title">AI+ 인증 획득 — 뉴스와이어 (2025.06)</div>
+      </div>
+      <div class="pf-body">
+        <div class="pf-item"><b>어떤 자료:</b> 인증·수상 보도자료. 인증의 의미→기술력 신뢰 구축→해외 시장 확장 연결 구조.</div>
+        <div class="pf-item"><b>면접에서 언제:</b> 인증·수상 PR 경험 또는 기술 신뢰도 커뮤니케이션 경험 질문 시.</div>
+        <div class="pf-item"><b>포인트:</b> "인증 받았다"를 단순 나열하지 않고 "왜 이 인증이 해외 진출에 의미 있는지"를 스토리화 한 구조.</div>
+        <div class="pf-item"><b>지니언스 연결:</b> "AV-Comparatives 인증을 보도자료로 만드는 방식이 이 자료와 같습니다. 인증→신뢰→시장 확장 스토리 구조."</div>
+      </div>
+    </div>
+
+    <div class="pf-card" onclick="togglePf(this)">
+      <div class="pf-header">
+        <div class="pf-num">06</div>
+        <div><span class="tag t-green">보도자료</span></div>
+        <div class="pf-title">포르투갈 브리사 그룹 계약 — 뉴스와이어 (2026.02)</div>
+      </div>
+      <div class="pf-body">
+        <div class="pf-item"><b>어떤 자료:</b> 글로벌 계약 체결 보도자료. 유럽 GDPR 준수, 개인정보 비식별화, 브리사 그룹 배경까지 담은 고난도 보도자료.</div>
+        <div class="pf-item"><b>면접에서 언제:</b> 글로벌 PR 경험, 파트너십 보도자료, 복잡한 기술·법규를 쉽게 쓴 경험 질문 시.</div>
+        <div class="pf-item"><b>포인트:</b> 포르투갈 최대 고속도로 운영사라는 배경 설명, GDPR 규정 준수 포인트까지 녹여낸 전문적 구조. 글로벌 기자·파트너가 읽는 영문 버전도 준비.</div>
+        <div class="pf-item"><b>지니언스 연결:</b> "지니언스의 싱가포르·UAE·사우디 파트너 계약 보도자료도 같은 방식으로 기획할 수 있습니다."</div>
+      </div>
+    </div>
+
+    <div class="pf-card" onclick="togglePf(this)">
+      <div class="pf-header">
+        <div class="pf-num">07</div>
+        <div><span class="tag t-green">보도자료</span></div>
+        <div class="pf-title">뉴욕시 교통국 협력 — 뉴스와이어 (2025.09)</div>
+      </div>
+      <div class="pf-body">
+        <div class="pf-item"><b>어떤 자료:</b> 미국 뉴욕시 교통국(NYC DOT) 파일럿 선정 보도자료. 글로벌 VC Newlab 공동 주관. 스타트업의 글로벌 레퍼런스를 알리는 PR.</div>
+        <div class="pf-item"><b>면접에서 언제:</b> 포트폴리오 제출 시. 또는 "성과를 낸 PR이 뭐냐" 질문 시.</div>
+        <div class="pf-item"><b>포인트:</b> 뉴욕시 규모, Newlab VC 배경, 10대1 경쟁률 선정을 자연스럽게 담아 임팩트를 높인 구조. 단순 계약 공지가 아니라 "한국 기술이 세계 무대에서 인정받은 스토리"로 설계.</div>
+        <div class="pf-item"><b>지니언스 연결:</b> "지니언스의 글로벌 확장 스토리를 같은 방식으로 설계하겠습니다."</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📎 포트폴리오 제출 순서 추천</div>
+    <div class="body-text">
+      <div class="highlight">
+        <b>1순위 (반드시 포함)</b><br>
+        ① 브리사 그룹 계약 — 글로벌 + 기술+법규 복합 난이도<br>
+        ② 뉴욕시 교통국 — 글로벌 임팩트 + 스토리 구조<br>
+        ③ CEO 인터뷰(동아일보) — 인터뷰 기획 역량<br><br>
+        <b>2순위 (추가 제출 시)</b><br>
+        ④ CES 2025 — 전시 PR 패턴<br>
+        ⑤ 기획기사(포트홀) — 능동적 PR 기획 역량
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── 위기 대응 ── -->
+<div class="sec" id="tab-crisis">
+
+  <div class="crisis-card" onclick="toggleCrisis(this)">
+    <div class="crisis-q">
+      <span style="font-size:16px">⚡</span>
+      <span class="crisis-q-text">"보안 업계 경험이 전혀 없는데, 처음부터 배울 수 있겠어요?"</span>
+      <span style="font-size:12px;color:#a0aec0">▼</span>
+    </div>
+    <div class="crisis-a">
+      <div class="answer-box">
+        "없다는 건 맞습니다. 다만 다리소프트에서도 입사 전에 AI 도로 센서 기술을 몰랐습니다. 배워서 동아일보·공학저널에 CEO 인터뷰를 냈고, 포르투갈·뉴욕시 보도자료를 썼습니다. 기술 PR은 기술 자체보다 기술이 해결하는 문제를 파는 것이라고 생각합니다. 이미 NAC·EDR·ZTNA·제로트러스트를 공부했고, 지니언스 보도자료 50여 건을 직접 분석했습니다. 보안 기술을 이해하는 것은 시간의 문제고, 지금 당장은 PR 기획력과 글쓰기로 기여하겠습니다."
+      </div>
+      <div class="strategy-box">💡 전략: 다리소프트 선례 → 이미 공부한 증거 → 즉시 기여 가능 영역 순서</div>
+    </div>
+  </div>
+
+  <div class="crisis-card" onclick="toggleCrisis(this)">
+    <div class="crisis-q">
+      <span style="font-size:16px">⚡</span>
+      <span class="crisis-q-text">"미디어 네트워크가 없잖아요. 어떻게 할 건가요?"</span>
+      <span style="font-size:12px;color:#a0aec0">▼</span>
+    </div>
+    <div class="crisis-a">
+      <div class="answer-box">
+        "완전히 없는 건 아닙니다. 기사를 자주 써주시는 기자분들께 개별 연락을 드렸고, 먼저 인터뷰 요청을 주신 기자분들과는 이후에도 직접 소통했습니다. 다만 보안 전문 기자 네트워크는 없다는 걸 인정합니다. 네트워크는 좋은 자료를 꾸준히 드리는 것이 결국 신뢰가 되고, 신뢰가 관계가 됩니다. 지니언스를 커버하는 전자신문·보안뉴스·데일리시큐 기자분들은 이미 파악해뒀고, 입사 후 첫 자료부터 시작해 빠르게 관계를 쌓겠습니다."
+      </div>
+      <div class="strategy-box">💡 전략: 인정→기존 노력 언급→구체적 계획 제시 순서. 매체 이름 구체적으로 언급.</div>
+    </div>
+  </div>
+
+  <div class="crisis-card" onclick="toggleCrisis(this)">
+    <div class="crisis-q">
+      <span style="font-size:16px">⚡</span>
+      <span class="crisis-q-text">"왜 지금 이직하려는 건가요?"</span>
+      <span style="font-size:12px;color:#a0aec0">▼</span>
+    </div>
+    <div class="crisis-a">
+      <div class="answer-box">
+        "B2G 사업 특성상 제품을 명확하게 정의하거나 공격적으로 알리기 어려운 구조였습니다. 실적이 나도 외부 노출을 조심해야 하는 상황이 반복됐고, PR이 전략적으로 작동하는 환경에서 일하고 싶다는 생각이 커졌습니다. 지니언스는 RSAC·자이텍스·블랙햇 MEA를 적극적으로 활용하고, 대표님 기고와 인터뷰도 꾸준히 내는 회사입니다. 제가 원하는 환경이라고 판단했습니다."
+      </div>
+      <div class="strategy-box">💡 전략: 회사 비난 없이 구조적 한계 설명 → 지니언스의 장점으로 자연 연결</div>
+    </div>
+  </div>
+
+  <div class="crisis-card" onclick="toggleCrisis(this)">
+    <div class="crisis-q">
+      <span style="font-size:16px">⚡</span>
+      <span class="crisis-q-text">"내부를 설득하려고 노력은 해봤나요?"</span>
+      <span style="font-size:12px;color:#a0aec0">▼</span>
+    </div>
+    <div class="crisis-a">
+      <div class="answer-box">
+        "노력했지만 구조적 한계가 있었습니다. 마케팅 담당자는 저 혼자였고, 영업팀은 국내외 포함 7명이었습니다. 의사결정 무게 자체가 달랐습니다. 이 경험에서 PR이 의사결정 구조 안에서 제 역할을 갖고 있어야 한다는 걸 배웠고, 지니언스처럼 PR팀이 별도로 있고 전략적으로 운영되는 환경을 찾게 됐습니다."
+      </div>
+      <div class="strategy-box">💡 전략: 수치("저 혼자, 영업 7명")로 구조적 현실 설명 → 성장 관점으로 전환</div>
+    </div>
+  </div>
+
+  <div class="crisis-card" onclick="toggleCrisis(this)">
+    <div class="crisis-q">
+      <span style="font-size:16px">⚡</span>
+      <span class="crisis-q-text">"마케팅을 5년 했는데 PR 전문성이 있다고 할 수 있나요?"</span>
+      <span style="font-size:12px;color:#a0aec0">▼</span>
+    </div>
+    <div class="crisis-a">
+      <div class="answer-box">
+        "넓게 했다는 건 인정합니다. 다만 다리소프트에서 2년 이상 언론홍보를 전담했고, 보도자료·CEO 인터뷰·기획기사를 직접 써서 언론에 게재했습니다. 브라이먼커뮤니케이션스 인턴에서는 NVIDIA·Cloudera의 보도자료 번역과 기자 커뮤니케이션을 보조했습니다. PR만 집중하는 환경을 선택하는 게 지금 이 지원의 이유입니다."
+      </div>
+      <div class="strategy-box">💡 전략: 인정→다리소프트·브라이먼 구체 경험 제시→"지금부터 집중" 선언</div>
+    </div>
+  </div>
+
+  <div class="crisis-card" onclick="toggleCrisis(this)">
+    <div class="crisis-q">
+      <span style="font-size:16px">⚡</span>
+      <span class="crisis-q-text">"학점이 3.21로 낮은데 이유를 설명해주세요." (면접후기 기반)</span>
+      <span style="font-size:12px;color:#a0aec0">▼</span>
+    </div>
+    <div class="crisis-a">
+      <div class="answer-box">
+        "학점 관리보다 실전 경험에 집중했습니다. 재학 중 PR 대행사 브라이먼커뮤니케이션스에서 인턴을 했고, TOEIC 940점을 취득했습니다. 졸업 후 바로 네오다임에서 Adobe·AWS·Databricks 캠페인을 운영했습니다. 학점이 낮은 건 사실이지만, 그 시간을 실무 역량 쌓는 데 썼다고 생각합니다."
+      </div>
+      <div class="strategy-box">💡 전략: 면접후기에서 자주 나오는 질문. 당황하지 않도록 미리 준비 필수. 실전 경험으로 전환.</div>
+    </div>
+  </div>
+
+  <div class="crisis-card" onclick="toggleCrisis(this)">
+    <div class="crisis-q">
+      <span style="font-size:16px">⚡</span>
+      <span class="crisis-q-text">"상사가 B 방법, 거래처가 C 방법이라고 할 때 어떻게 하나요?" (면접후기 기반)</span>
+      <span style="font-size:12px;color:#a0aec0">▼</span>
+    </div>
+    <div class="crisis-a">
+      <div class="answer-box">
+        "먼저 각자의 우선순위가 무엇인지 파악합니다. 상사는 조직 리스크를, 거래처는 실질 효과를 우선시하는 경우가 많습니다. 다리소프트에서 영업팀이 보도자료를 꺼릴 때, 목적(신뢰 구축)을 공유하고 매체 범위와 표현을 조율하는 방식으로 절충했습니다. 제 방법이 맞다고 생각해도 혼자 밀어붙이면 결과가 안 납니다. 목적을 같이 확인하고 방법을 맞추는 게 제 방식입니다."
+      </div>
+      <div class="strategy-box">💡 전략: 면접후기에서 나온 시뮬레이션 질문. 다리소프트 영업팀 사례를 실제 예시로 활용.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── 면접 흐름 ── -->
+<div class="sec" id="tab-flow">
+
+  <div class="card">
+    <div class="card-title">🗂 지니언스 면접 단계별 전략</div>
+    <div class="warn">⚠️ 면접후기 기반: 인사팀이 면접을 주도하는 경우 多. 이력서 한 줄 한 줄 다 뜯어봄. 대학 관련 질문도 경력직에게 나옴. 미리 대비 필수.</div>
+  </div>
+
+  <div class="card">
+    <div class="flow-item">
+      <div class="flow-num">1</div>
+      <div class="flow-body">
+        <div class="flow-title">1차 실무 면접</div>
+        <div class="flow-sub">실무진(대리급) + 인사팀 주도 · 이력서 기반 밀착 질문 · 4~5명</div>
+        <div class="flow-desc">
+          <b>핵심 전략:</b> 이력서 한 줄마다 숫자와 결과를 붙여서 설명. "무슨 일을 했다"가 아니라 "이 일이 어떤 결과를 냈다"로.<br><br>
+          <b>예상 질문:</b> 이직 사유 / 전직장 팀 구성 / 보도자료 몇 건 썼나 / 포트폴리오 성과가 뭐냐 / 지원 동기<br><br>
+          <b>포트폴리오:</b> 브리사 그룹·뉴욕시·CEO 인터뷰 3개 중심으로 설명. "이 자료가 나간 후 어떤 결과가 있었는지"까지 준비.<br><br>
+          <b>주의:</b> 인사팀이 학점·대학·공백기까지 물어볼 수 있음(면접후기 기반). 당황하지 말고 준비한 답변 그대로.
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-item">
+      <div class="flow-num">2</div>
+      <div class="flow-body">
+        <div class="flow-title">인적성 검사</div>
+        <div class="flow-sub">1차 합격 후 온라인 진행</div>
+        <div class="flow-desc">
+          <b>핵심 전략:</b> 별도 준비보다 합격 이후 신속하게 일정 확인. 면접후기에서 "합불 결과 통보가 느리다"는 언급이 있음. 2주 이상 기다릴 수 있음을 감안.
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-item">
+      <div class="flow-num">3</div>
+      <div class="flow-body">
+        <div class="flow-title">2차 임원 면접</div>
+        <div class="flow-sub">임원(마케팅 실장급) + 인사팀장 · 직무 전략 깊이</div>
+        <div class="flow-desc">
+          <b>핵심 전략:</b> 실무 능력보다 "이 사람이 지니언스 PR 방향을 이해하는가"를 봄. 지니언스 보도자료 패턴, 글로벌 전시 전략, IR 연계 PR을 구체적으로 언급.<br><br>
+          <b>예상 질문:</b> PR 전략 방향 / 지니언스에서 첫 6개월 무엇을 할 것인가 / 보안 PR을 어떻게 접근할 것인가<br><br>
+          <b>준비 포인트:</b> "입사 후 30일 계획" 정도는 말할 수 있게. 보안뉴스·전자신문 기자 리스트 파악, 첫 보도자료 주제 아이디어 1~2개 준비.
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-item">
+      <div class="flow-num">4</div>
+      <div class="flow-body">
+        <div class="flow-title">CEO 최종 면접</div>
+        <div class="flow-sub">화상 또는 대면 · "함께 일할 수 있는가" 판단 · 색다른 질문 가능</div>
+        <div class="flow-desc">
+          <b>핵심 전략:</b> 면접후기에서 "색다른 질문이 등장한다"고 언급. 정답보다 진심과 생각의 깊이를 본다는 인상. 당황하지 않고 솔직하게 대답.<br><br>
+          <b>예상 질문 유형:</b> "보안 업계를 어떻게 보나요?" / "지니언스 PR에서 가장 개선하고 싶은 게 뭔가요?" / "10년 후 어떤 사람이 되고 싶나요?"<br><br>
+          <b>핵심 메시지:</b> "기술을 이해하고, 비즈니스 언어로 번역하고, 시장에 전달하는 PR 전문가가 되겠습니다."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📅 입사 후 30일 계획 (임원 면접 대비)</div>
+    <div class="body-text">
+      <div class="highlight">
+        <b>1~2주차:</b> 기존 보도자료·기사 전수 파악. 팀원들과 1:1 미팅. 담당 기자 리스트와 최근 기사 파악.<br><br>
+        <b>3주차:</b> 첫 이슈 모니터링 보고서 제출. 담당 기자 2~3명에게 첫 인사 연락.<br><br>
+        <b>4주차:</b> 첫 보도자료 초안 제안. (예: RSAC 2026 결과 성료 보도자료 또는 Q2 실적 관련 PR 소재 기획)
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── 역질문 ── -->
+<div class="sec" id="tab-questions">
+
+  <div class="card">
+    <div class="card-title">💬 면접관에게 할 역질문 — 단계별 추천</div>
+    <div class="body-text" style="font-size:12px;color:#718096;margin-bottom:10px">역질문은 준비성과 관심도를 동시에 보여줌. 단, 처우·연봉 관련은 1차에서 금물.</div>
+
+    <div class="sub-title">1차 실무 면접용</div>
+    <div class="q-item">PR팀에서 현재 가장 집중하고 있는 메시지나 캠페인 방향이 있다면 어떤 부분인가요?
+      <div class="q-why">→ 팀의 현재 우선순위 파악. 내가 기여할 수 있는 영역을 확인하는 질문.</div>
+    </div>
+    <div class="q-item">지니언스가 RSAC·자이텍스 같은 글로벌 전시에서 PR을 어떻게 운영하는지 구체적으로 궁금합니다.
+      <div class="q-why">→ 글로벌 PR에 관심 있다는 걸 어필. 보도자료 연구를 했다는 것도 자연스럽게 드러남.</div>
+    </div>
+    <div class="q-item">이 포지션에서 6개월 후 어떤 모습이면 가장 이상적이라고 생각하시나요?
+      <div class="q-why">→ 기대치를 파악하는 실용적 질문. 면접관이 좋아하는 유형.</div>
+    </div>
+
+    <div class="sub-title">2차 임원 면접용</div>
+    <div class="q-item">현재 지니언스 PR에서 가장 도전적인 과제가 무엇인지 여쭤봐도 될까요?
+      <div class="q-why">→ 진짜 현안을 파악. 내가 해결에 기여할 수 있다는 맥락을 이을 수 있음.</div>
+    </div>
+    <div class="q-item">보안 업계 PR 특성상 기술 발표 타이밍과 공시 연동이 중요할 것 같은데, 내부적으로 어떻게 조율하시나요?
+      <div class="q-why">→ 상장사 PR의 복잡성을 이해한다는 것을 보여주는 질문. 진지하게 받아들여짐.</div>
+    </div>
+
+    <div class="sub-title">CEO 최종 면접용</div>
+    <div class="q-item">대표님이 생각하시는 지니언스만의 PR 정체성이 있다면 어떤 것인가요?
+      <div class="q-why">→ CEO 면접에서 가장 임팩트 있는 질문. 회사의 목소리를 직접 듣겠다는 자세.</div>
+    </div>
+    <div class="q-item">글로벌 보안 기업들과 비교했을 때 지니언스가 가장 강조하고 싶은 메시지가 있다면 무엇인가요?
+      <div class="q-why">→ CEO가 가장 좋아하는 유형. "우리 회사를 제대로 이해하고 왔구나"라는 인상.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎤 마지막 할 말 — 3줄 클로징</div>
+    <div class="highlight">
+      "지니언스의 보도자료와 기사를 정말 많이 읽었습니다.<br>
+      읽으면서 이 팀이 PR을 얼마나 전략적으로 운영하는지 느꼈고,<br>
+      그 방향에 제가 기여할 수 있다는 확신이 생겼습니다.<br>
+      보안 도메인은 배워가겠지만, PR 기획력과 글쓰기는 지금 당장 드릴 수 있습니다."
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showTab(id){
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    const ids=['positioning','jdmap','portfolio','crisis','flow','questions'];
+    t.classList.toggle('active', ids[i]===id);
+  });
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function togglePf(el){
+  const body = el.querySelector('.pf-body');
+  body.classList.toggle('open');
+}
+function toggleCrisis(el){
+  const a = el.querySelector('.crisis-a');
+  const arr = el.querySelector('.crisis-q span:last-child');
+  a.classList.toggle('open');
+  arr.textContent = a.classList.contains('open') ? '▲' : '▼';
+}
+</script>
+</body>
+</html>

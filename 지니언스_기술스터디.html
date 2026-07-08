@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>지니언스 기술 스터디 | 면접 준비</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif; background: #f0f4f8; color: #1a202c; line-height: 1.7; }
+
+  header { background: linear-gradient(135deg, #1a5f2a 0%, #2d8a3e 100%); color: white; padding: 40px 32px; }
+  header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+  header p { font-size: 14px; opacity: 0.85; }
+
+  nav { background: #fff; border-bottom: 1px solid #e2e8f0; padding: 0 32px; display: flex; gap: 4px; overflow-x: auto; position: sticky; top: 0; z-index: 100; }
+  nav a { display: inline-block; padding: 14px 16px; font-size: 13px; color: #4a5568; text-decoration: none; white-space: nowrap; border-bottom: 3px solid transparent; transition: all 0.2s; }
+  nav a:hover, nav a.active { color: #1a5f2a; border-bottom-color: #1a5f2a; font-weight: 600; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 32px 24px; }
+
+  section { margin-bottom: 48px; }
+  section:target { scroll-margin-top: 60px; }
+
+  h2 { font-size: 20px; font-weight: 700; color: #1a202c; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #2d8a3e; display: flex; align-items: center; gap: 8px; }
+  h2 .icon { font-size: 22px; }
+
+  h3 { font-size: 16px; font-weight: 700; color: #2d3748; margin: 20px 0 10px; }
+
+  .card { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); border-left: 4px solid #2d8a3e; }
+  .card.blue { border-left-color: #3182ce; }
+  .card.purple { border-left-color: #805ad5; }
+  .card.orange { border-left-color: #dd6b20; }
+  .card.teal { border-left-color: #2c7a7b; }
+  .card.red { border-left-color: #c53030; }
+  .card.pink { border-left-color: #d53f8c; }
+
+  .card-title { font-size: 16px; font-weight: 700; color: #1a202c; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .card-subtitle { font-size: 13px; color: #718096; margin-bottom: 12px; }
+  .card p { font-size: 14px; color: #4a5568; line-height: 1.8; }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .badge-green { background: #c6f6d5; color: #276749; }
+  .badge-blue { background: #bee3f8; color: #2b6cb0; }
+  .badge-purple { background: #e9d8fd; color: #6b46c1; }
+  .badge-orange { background: #feebc8; color: #c05621; }
+  .badge-red { background: #fed7d7; color: #9b2c2c; }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+
+  .term-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .term-item { background: #fff; border-radius: 10px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.07); }
+  .term-en { font-size: 13px; font-weight: 700; color: #2d8a3e; margin-bottom: 2px; }
+  .term-ko { font-size: 12px; color: #718096; margin-bottom: 8px; }
+  .term-desc { font-size: 13px; color: #4a5568; line-height: 1.6; }
+
+  .highlight-box { background: #f0fff4; border: 1px solid #9ae6b4; border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+  .highlight-box h4 { font-size: 14px; font-weight: 700; color: #276749; margin-bottom: 8px; }
+  .highlight-box p, .highlight-box li { font-size: 14px; color: #2d3748; line-height: 1.7; }
+  .highlight-box ul { padding-left: 18px; }
+
+  .warn-box { background: #fffaf0; border: 1px solid #fbd38d; border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+  .warn-box h4 { font-size: 14px; font-weight: 700; color: #c05621; margin-bottom: 8px; }
+  .warn-box p { font-size: 14px; color: #2d3748; line-height: 1.7; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .stat-item { background: #fff; border-radius: 10px; padding: 16px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.07); }
+  .stat-num { font-size: 24px; font-weight: 800; color: #2d8a3e; }
+  .stat-label { font-size: 12px; color: #718096; margin-top: 4px; }
+
+  .flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+  .flow-item { background: #ebf8ff; color: #2b6cb0; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+  .flow-arrow { color: #a0aec0; font-size: 18px; }
+
+  .q-item { background: #fff; border-radius: 10px; padding: 20px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.07); }
+  .q-label { font-size: 11px; font-weight: 700; color: #c53030; background: #fff5f5; padding: 2px 8px; border-radius: 10px; display: inline-block; margin-bottom: 8px; }
+  .q-text { font-size: 14px; font-weight: 600; color: #1a202c; margin-bottom: 10px; }
+  .q-hint { font-size: 13px; color: #718096; padding-top: 10px; border-top: 1px dashed #e2e8f0; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 12px; }
+  th { background: #f7fafc; padding: 10px 14px; text-align: left; font-weight: 600; color: #4a5568; border-bottom: 2px solid #e2e8f0; }
+  td { padding: 10px 14px; border-bottom: 1px solid #e2e8f0; color: #2d3748; }
+  tr:hover td { background: #f7fafc; }
+
+  .media-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .media-tag { background: #edf2f7; color: #4a5568; padding: 4px 10px; border-radius: 6px; font-size: 12px; }
+
+  @media (max-width: 640px) {
+    header { padding: 20px 16px; }
+    header h1 { font-size: 20px; }
+    header p { font-size: 12px; }
+
+    nav { padding: 0 8px; gap: 0; }
+    nav a { padding: 11px 10px; font-size: 12px; }
+
+    .container { padding: 16px 12px; }
+
+    h2 { font-size: 17px; }
+    h3 { font-size: 14px; }
+
+    .card { padding: 16px; }
+    .card-title { font-size: 14px; flex-wrap: wrap; }
+
+    .stat-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .stat-num { font-size: 20px; }
+    .stat-label { font-size: 11px; }
+
+    .term-grid { grid-template-columns: 1fr; }
+
+    /* 테이블 → 카드 변환 */
+    table, thead, tbody, th, td, tr { display: block; }
+    thead { display: none; }
+    tr { background: #fff; border-radius: 10px; margin-bottom: 10px; padding: 12px 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.07); }
+    td { border: none; padding: 4px 0; font-size: 13px; line-height: 1.6; }
+    td:first-child { font-size: 11px; color: #2d8a3e; font-weight: 700; margin-bottom: 2px; }
+    td:last-child { font-size: 12px; color: #718096; margin-top: 4px; padding-top: 6px; border-top: 1px dashed #e2e8f0; }
+
+    .flow { flex-direction: column; align-items: flex-start; gap: 6px; }
+    .flow-arrow { transform: rotate(90deg); margin-left: 14px; }
+
+    .q-item { padding: 14px; }
+    .q-text { font-size: 13px; }
+    .q-hint { font-size: 12px; }
+
+    .highlight-box, .warn-box { padding: 14px; }
+    .highlight-box p, .highlight-box li, .warn-box p { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🛡️ 지니언스 기술 스터디</h1>
+  <p>언론홍보(PR) 면접 준비 | 솔루션 · 기술 · 업계 트렌드 총정리</p>
+</header>
+
+<nav>
+  <a href="#overview">회사 개요</a>
+  <a href="#products">핵심 솔루션</a>
+  <a href="#tech">기술 개념</a>
+  <a href="#strategy">사업 전략</a>
+  <a href="#news">최근 뉴스</a>
+  <a href="#media">담당 매체</a>
+  <a href="#qa">면접 Q&A</a>
+</nav>
+
+<div class="container">
+
+  <!-- 회사 개요 -->
+  <section id="overview">
+    <h2><span class="icon">🏢</span> 회사 개요</h2>
+
+    <div class="stat-row">
+      <div class="stat-item">
+        <div class="stat-num">21년</div>
+        <div class="stat-label">업력 (2004년 설립)</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">263860</div>
+        <div class="stat-label">코스닥 상장 종목코드</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">3,000+</div>
+        <div class="stat-label">국내 고객사 레퍼런스</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">36개국</div>
+        <div class="stat-label">글로벌 진출 국가</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">81개</div>
+        <div class="stat-label">글로벌 파트너</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">200+</div>
+        <div class="stat-label">글로벌 고객사</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">한 줄 정의</div>
+      <p style="margin-top:8px;">네트워크 접근제어(NAC)로 시작해 EDR·ZTNA까지 확장한 <strong>통합 사이버 보안 플랫폼 기업</strong>. 공공기관부터 글로벌 기업까지 엔드포인트와 네트워크 보안을 동시에 제공한다.</p>
+    </div>
+
+    <div class="highlight-box">
+      <h4>📌 대표이사 및 주요 임원</h4>
+      <ul>
+        <li><strong>이동범</strong> 대표이사 — 보안 업계 20년+, 언론 기고·인터뷰 활발</li>
+        <li><strong>김계연</strong> CTO·미국법인장 — 기술 전략 총괄, RSAC 등 글로벌 행사 전면</li>
+        <li><strong>이민상</strong> 보안솔루션연구소 전무 — EDR/엔드포인트 기술 리드</li>
+        <li><strong>나세일</strong> 해외사업본부 상무(→이사) — 글로벌 영업·APAC 담당</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 핵심 솔루션 -->
+  <section id="products">
+    <h2><span class="icon">📦</span> 핵심 솔루션 4종</h2>
+
+    <div class="card">
+      <div class="card-title">🔐 NAC — Network Access Control <span class="badge badge-green">창업 원조 제품</span></div>
+      <div class="card-subtitle">지니안 NAC | 네트워크 접근 제어</div>
+      <p>네트워크에 접속하려는 모든 기기와 사용자를 <strong>식별·인증·통제</strong>하는 솔루션. 허가받지 않은 단말은 네트워크 진입 자체를 차단한다. 유·무선 환경 모두 적용 가능하며 글로벌 네트워크 구조에서도 구성 변경 없이 도입 가능한 것이 강점.</p>
+      <div class="tag-row">
+        <span class="badge badge-green">국내 시장 1위</span>
+        <span class="badge badge-blue">3,000+ 레퍼런스</span>
+        <span class="badge badge-green">글로벌 200+ 고객</span>
+        <span class="badge badge-orange">싱가포르·중동 등 해외 확장 중</span>
+      </div>
+    </div>
+
+    <div class="card blue">
+      <div class="card-title">🖥️ EDR — Endpoint Detection & Response <span class="badge badge-blue">공공 조달 7년 연속 1위</span></div>
+      <div class="card-subtitle">지니안 인사이츠 E (Genian Insights E) | 엔드포인트 탐지 및 대응</div>
+      <p>PC·서버 등 엔드포인트에서 발생하는 모든 행위를 <strong>상시 모니터링</strong>해 랜섬웨어·APT 등 지능형 위협을 실시간 탐지하고 차단·복구까지 지원. 머신러닝 엔진 기반으로 알려지지 않은 악성코드도 탐지 가능. 2026년 AV-Comparatives 글로벌 인증 획득 (국내 유일).</p>
+      <div class="tag-row">
+        <span class="badge badge-blue">공공 점유율 46%</span>
+        <span class="badge badge-blue">75만 에이전트 운영</span>
+        <span class="badge badge-green">AV-Comparatives 인증</span>
+        <span class="badge badge-purple">AI 머신러닝 탑재</span>
+      </div>
+    </div>
+
+    <div class="card purple">
+      <div class="card-title">🔒 ZTNA — Zero Trust Network Access <span class="badge badge-purple">제로트러스트 3.0 핵심</span></div>
+      <div class="card-subtitle">원격·내부 접근 제어 솔루션</div>
+      <p>"<strong>아무도 기본적으로 신뢰하지 않는다</strong>"는 제로트러스트 원칙 기반. 사용자·기기·위치에 관계없이 접근 시마다 인증과 권한 검증을 수행. 재택·원격 근무 확산으로 기업 보안 경계가 무너진 환경에서 핵심 솔루션으로 부상. 클라우드 구독 모델로도 제공.</p>
+      <div class="tag-row">
+        <span class="badge badge-purple">클라우드 구독 가능</span>
+        <span class="badge badge-orange">원격근무 환경 최적화</span>
+        <span class="badge badge-blue">ZTNA 3.0 전략 연계</span>
+      </div>
+    </div>
+
+    <div class="card orange">
+      <div class="card-title">🛡️ Genian Insights E 3.0 <span class="badge badge-orange">통합 엔드포인트 플랫폼</span></div>
+      <div class="card-subtitle">EDR + AV + AR + 매체제어 단일 에이전트 통합 (EPP)</div>
+      <p>EDR에 <strong>백신(AV)</strong>, <strong>안티랜섬웨어(AR)</strong>, <strong>매체제어(Device Control)</strong>를 하나의 에이전트에 통합한 EPP 플랫폼. AI가 자율 공격 시나리오를 설계하는 시대에 가장 실전적 해법으로 주목받음. "언제든 뚫릴 수 있다"는 전제 하에 사후 탐지·빠른 가시성 확보에 초점.</p>
+      <div class="tag-row">
+        <span class="badge badge-orange">단일 에이전트</span>
+        <span class="badge badge-green">EDR + 백신 + AR + 매체제어</span>
+        <span class="badge badge-blue">AI 해킹 대응</span>
+      </div>
+    </div>
+
+    <div class="card teal">
+      <div class="card-title">🏠 지니안 홈 (Genian Home) <span class="badge badge-green">2026년 신제품</span></div>
+      <div class="card-subtitle">홈네트워크 세대간 망분리 보안 솔루션</div>
+      <p>아파트 단지 홈네트워크의 세대 간 보안 분리 솔루션. VPN 방식(세대별 암호화 통신·접근 제어)과 VLAN 방식(독립 네트워크 환경) 두 가지 제공. 2021년 '월패드 해킹' 이슈 이후 강화된 홈네트워크 보안 의무화 규정에 대응. 기존 인프라 변경 없이 신·구 아파트 모두 적용 가능.</p>
+      <div class="tag-row">
+        <span class="badge badge-green">VPN + VLAN 방식</span>
+        <span class="badge badge-blue">CC인증 보유</span>
+        <span class="badge badge-orange">신성장 영역</span>
+      </div>
+    </div>
+
+    <div class="card red">
+      <div class="card-title">⚛️ 양자 보안 게이트웨이 (PQC Gateway) <span class="badge badge-red">R&D 단계</span></div>
+      <div class="card-subtitle">Post-Quantum Cryptography | 양자내성암호 기반 차세대 제품</div>
+      <p>양자 컴퓨터가 기존 암호를 수 초 만에 해독할 수 있는 위협에 대응. 양자내성암호(PQC)와 키관리시스템(KMS)을 동시 내재화한 게이트웨이 개발 중. 2026년 최종 검증 단계 진입. 글로벌 PQC 시장은 2030년 약 4.7조원 규모로 성장 예상.</p>
+      <div class="tag-row">
+        <span class="badge badge-red">미래 성장동력</span>
+        <span class="badge badge-purple">PQC 원천기술</span>
+        <span class="badge badge-orange">제로트러스트 3.0 연계</span>
+      </div>
+    </div>
+
+    <div class="card pink">
+      <div class="card-title">🔎 MDR — Managed Detection & Response <span class="badge badge-green">서비스 사업 확장</span></div>
+      <div class="card-subtitle">매니지드 탐지 및 대응 서비스</div>
+      <p>제품 판매를 넘어 <strong>보안 운영을 서비스로 제공</strong>하는 모델. 2026년 지니언스가 '서비스 사업 도약 원년'으로 선언하며 조직 개편 단행. 파트너사와 수익을 공유하는 MDR 서비스 생태계 구축 중. 제품 중심에서 서비스 중심으로의 사업 피벗.</p>
+      <div class="tag-row">
+        <span class="badge badge-green">2026 전략 핵심</span>
+        <span class="badge badge-blue">파트너 협업 모델</span>
+        <span class="badge badge-orange">클라우드 구독 연계</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 기술 개념 용어 -->
+  <section id="tech">
+    <h2><span class="icon">🧠</span> 꼭 알아야 할 기술 용어</h2>
+
+    <h3>🔑 핵심 보안 개념</h3>
+    <div class="term-grid">
+      <div class="term-item">
+        <div class="term-en">Zero Trust</div>
+        <div class="term-ko">제로트러스트</div>
+        <div class="term-desc">"절대 신뢰하지 말고, 항상 검증하라." 내부 사용자라도 접근 시마다 인증·권한을 확인. 재택근무 확산 후 글로벌 표준으로 자리잡음.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-en">APT</div>
+        <div class="term-ko">지능형 지속 위협 (Advanced Persistent Threat)</div>
+        <div class="term-desc">특정 조직을 장기간 은밀히 공격하는 고도화된 사이버 위협. 최근 AI가 APT 공격 자동화에 활용됨.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-en">Ransomware</div>
+        <div class="term-ko">랜섬웨어</div>
+        <div class="term-desc">파일을 암호화하고 복구 대가로 금전을 요구하는 악성코드. EDR·AR 솔루션의 주요 대응 대상.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-en">Endpoint</div>
+        <div class="term-ko">엔드포인트</div>
+        <div class="term-desc">네트워크 끝단에 연결된 PC·서버·모바일 기기. EDR이 이 지점을 모니터링한다.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-en">Visibility</div>
+        <div class="term-ko">가시성</div>
+        <div class="term-desc">네트워크·엔드포인트에서 무슨 일이 일어나는지 볼 수 있는 능력. 지니언스의 핵심 가치 제안 중 하나.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-en">Compliance</div>
+        <div class="term-ko">규정 준수</div>
+        <div class="term-desc">개인정보보호법·망분리 의무 등 보안 규제 요건을 충족하는 것. 지니언스 RSAC 2026 키워드 'Compliance Velocity'.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-en">PQC</div>
+        <div class="term-ko">양자내성암호 (Post-Quantum Cryptography)</div>
+        <div class="term-desc">양자 컴퓨터로도 해독 불가능한 암호 알고리즘. 지니언스의 차세대 성장동력.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-en">MDR</div>
+        <div class="term-ko">매니지드 탐지 및 대응</div>
+        <div class="term-desc">보안 전문 기업이 고객 대신 24/7 위협을 탐지·대응해주는 서비스. 제품에서 서비스로의 전환 트렌드.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-en">EPP</div>
+        <div class="term-ko">엔드포인트 보호 플랫폼</div>
+        <div class="term-desc">백신·EDR·매체제어 등 여러 엔드포인트 보안 기능을 통합한 플랫폼. Insights E 3.0이 EPP 시장 진출 중.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-en">CTI</div>
+        <div class="term-ko">사이버 위협 인텔리전스</div>
+        <div class="term-desc">전 세계 위협 데이터를 분석해 공격 패턴·악성코드 정보를 제공하는 서비스. EDR의 AI 탐지 정확도를 높이는 데 활용.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-en">Bug Bounty</div>
+        <div class="term-ko">버그바운티 / 취약점 신고 포상제</div>
+        <div class="term-desc">화이트해커가 취약점을 찾아 신고하면 포상금을 지급하는 제도. 지니언스는 국내 보안업계 최초 독자 운영.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-en">VDP / CVD</div>
+        <div class="term-ko">취약점 공개 정책 / 협력적 취약점 공개</div>
+        <div class="term-desc">취약점 신고~패치~공개까지의 체계적 프로세스. 지니언스가 국제 표준 CVD/VDP를 준수하며 Github·CVE ID 연계.</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:28px;">🔗 기술 흐름 — 지니언스 통합 보안 구조</h3>
+    <div class="card blue">
+      <p style="margin-bottom:12px;">지니언스는 3개 구간을 하나의 흐름으로 연결하는 <strong>통합 보안 인프라</strong>를 지향한다.</p>
+      <div class="flow">
+        <div class="flow-item">접속 단계<br><small>NAC</small></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">세션 단계<br><small>ZTNA</small></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">실행 단계<br><small>Insights E (EDR)</small></div>
+      </div>
+      <p style="margin-top:12px; font-size:13px; color:#4a5568;">각 단계에서 보안이 작동하도록 설계 → 어느 구간에서든 위협 탐지·차단 가능</p>
+    </div>
+
+    <h3>🤖 AI + 보안 트렌드</h3>
+    <div class="warn-box">
+      <h4>⚠️ 미토스(Mythos) 이슈 — 면접에서 나올 수 있음</h4>
+      <p>앤스로픽의 AI 모델 '미토스'가 자율적으로 해킹 시나리오를 설계하는 것으로 알려지며 EDR 수요 급증. IMF·세계은행 회의에서도 AI 사이버위협이 주요 의제로 다뤄짐. 금감원은 금융기관 EDR 점검을 언급. → 지니언스의 EDR 사업 성장 기회.</p>
+    </div>
+  </section>
+
+  <!-- 사업 전략 -->
+  <section id="strategy">
+    <h2><span class="icon">🎯</span> 사업 전략 & 방향</h2>
+
+    <h3>2026년 핵심 전략 키워드</h3>
+    <div class="term-grid">
+      <div class="term-item">
+        <div class="term-en" style="color:#c05621;">서비스 사업 도약</div>
+        <div class="term-desc">제품 판매 → MDR 서비스로 피벗. 2026년 조직 개편 단행. 파트너사와 수익 공유 모델.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-en" style="color:#2b6cb0;">글로벌 확장</div>
+        <div class="term-desc">36개국·81개 파트너. 북미(매출 1위), 중동(전략적 요충), APAC(싱가포르 첫 고객). 인도 GTSC 설립.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-en" style="color:#276749;">EPP 시장 진출</div>
+        <div class="term-desc">EDR 고객층 → 더 넓은 EPP 시장으로 확장. Insights E 3.0이 통합 엔드포인트 보안 플랫폼으로.</div>
+      </div>
+      <div class="term-item">
+        <div class="term-en" style="color:#6b46c1;">양자 보안 (PQC)</div>
+        <div class="term-desc">차세대 성장동력. 2030년 4.7조원 시장 선점 목표. 제로트러스트 3.0 전략과 연계.</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:24px;">재무 현황 (2026년 1Q)</h3>
+    <div class="stat-row">
+      <div class="stat-item">
+        <div class="stat-num">117.4억</div>
+        <div class="stat-label">1Q 매출 (전년比 +25.5%)</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">47배</div>
+        <div class="stat-label">영업이익 증가 (전년比)</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">창사 이래</div>
+        <div class="stat-label">1분기 최대 실적</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">20~25%</div>
+        <div class="stat-label">배당성향 (상장사 주주환원)</div>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      <h4>💡 PR 담당자 입장에서 이 실적이 중요한 이유</h4>
+      <p>상장사이므로 실적 발표 시 IR 지원 업무가 발생한다. 영업이익 47배 성장 같은 수치는 단순 보도자료가 아니라 투자자·언론 모두를 대상으로 하는 커뮤니케이션이 필요하다. JD에 "IR 업무 지원"이 포함된 이유.</p>
+    </div>
+  </section>
+
+  <!-- 최근 주요 뉴스 -->
+  <section id="news">
+    <h2><span class="icon">📰</span> 최근 주요 뉴스 & 이슈</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>시기</th>
+          <th>이슈</th>
+          <th>PR 관점 포인트</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2026.06</td>
+          <td>버그바운티 상반기 결과: 접수 +129%, 포상금 +1,046%</td>
+          <td>AI 해킹 시대 선제 대응 이미지 구축</td>
+        </tr>
+        <tr>
+          <td>2026.06</td>
+          <td>AV-Comparatives EDR 글로벌 인증 (국내 유일)</td>
+          <td>글로벌 기술력 입증 → 해외 영업 레버리지</td>
+        </tr>
+        <tr>
+          <td>2026.05</td>
+          <td>양자 보안 게이트웨이 최종 검증 단계 진입</td>
+          <td>미래 성장동력 선점 스토리</td>
+        </tr>
+        <tr>
+          <td>2026.05</td>
+          <td>1Q 창사 최대 실적, 영업이익 47배 성장</td>
+          <td>턴어라운드·어닝서프라이즈 → 주가·IR 이슈</td>
+        </tr>
+        <tr>
+          <td>2026.04</td>
+          <td>EDR 공공 조달 7년 연속 1위 (점유율 46%)</td>
+          <td>시장 지배력 + 신뢰도 메시지</td>
+        </tr>
+        <tr>
+          <td>2026.04</td>
+          <td>글로벌 고객 200곳 돌파</td>
+          <td>K-보안 글로벌화 스토리</td>
+        </tr>
+        <tr>
+          <td>2026.03</td>
+          <td>RSAC 2026 12년 연속 참가</td>
+          <td>글로벌 브랜드 인지도 + Compliance Velocity 키워드</td>
+        </tr>
+        <tr>
+          <td>2026.02</td>
+          <td>싱가포르 첫 고객 확보 (APAC 신호탄)</td>
+          <td>14개 매체 동시 보도 → PR 파급력 사례</td>
+        </tr>
+        <tr>
+          <td>2026.01</td>
+          <td>지니안 홈 출시 (홈네트워크 세대간 망분리)</td>
+          <td>월패드 해킹 이슈 연계 → 생활밀착형 보안</td>
+        </tr>
+        <tr>
+          <td>2025.12</td>
+          <td>블랙햇 MEA 2025 참가 (중동·아프리카)</td>
+          <td>한-중동 디지털 협력 + 사우디 비전 2030 연계</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 담당 매체 -->
+  <section id="media">
+    <h2><span class="icon">📡</span> 지니언스를 자주 다루는 매체</h2>
+
+    <div class="card">
+      <h3 style="margin-top:0; margin-bottom:12px;">보안 전문 매체 (우선순위 높음)</h3>
+      <div class="media-list">
+        <span class="media-tag">보안뉴스</span>
+        <span class="media-tag">데일리시큐</span>
+        <span class="media-tag">아이티데일리</span>
+        <span class="media-tag">데이터넷</span>
+        <span class="media-tag">테크월드</span>
+      </div>
+    </div>
+
+    <div class="card blue">
+      <h3 style="margin-top:0; margin-bottom:12px;">IT 전문 매체</h3>
+      <div class="media-list">
+        <span class="media-tag">전자신문</span>
+        <span class="media-tag">지디넷코리아</span>
+        <span class="media-tag">디지털데일리</span>
+        <span class="media-tag">디지털타임스</span>
+        <span class="media-tag">디지털투데이</span>
+        <span class="media-tag">바이라인네트워크</span>
+        <span class="media-tag">테크M</span>
+        <span class="media-tag">아이티비즈</span>
+        <span class="media-tag">정보통신신문</span>
+      </div>
+    </div>
+
+    <div class="card orange">
+      <h3 style="margin-top:0; margin-bottom:12px;">경제·종합 매체</h3>
+      <div class="media-list">
+        <span class="media-tag">연합뉴스</span>
+        <span class="media-tag">서울경제</span>
+        <span class="media-tag">파이낸셜뉴스</span>
+        <span class="media-tag">이데일리</span>
+        <span class="media-tag">조선비즈</span>
+        <span class="media-tag">뉴시스</span>
+        <span class="media-tag">뉴스1</span>
+        <span class="media-tag">뉴스핌</span>
+        <span class="media-tag">머니투데이</span>
+        <span class="media-tag">아시아경제</span>
+        <span class="media-tag">이투데이</span>
+      </div>
+    </div>
+
+    <div class="highlight-box" style="margin-top:16px;">
+      <h4>💡 면접 전 액션</h4>
+      <p>위 매체에서 "지니언스" 검색 후, 최근 3개월 기사를 쓴 기자 이름을 2~3명 파악해두기. 어떤 매체의 어떤 기자가 지니언스를 지속적으로 커버하는지 알고 있으면 "미디어 네트워크 없음" 약점을 일부 커버할 수 있음.</p>
+    </div>
+  </section>
+
+  <!-- 면접 Q&A -->
+  <section id="qa">
+    <h2><span class="icon">🎤</span> 예상 면접 질문 & 답변 힌트</h2>
+
+    <div class="q-item">
+      <div class="q-label">거의 확실</div>
+      <div class="q-text">지니언스의 주요 제품이 뭔지 아세요? 설명해보시겠어요?</div>
+      <div class="q-hint">NAC → EDR(Insights E) → ZTNA → 통합 보안 인프라 흐름으로 설명. "접속·세션·실행 3단계를 하나로 연결하는 구조"라는 프레임 사용.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-label">거의 확실</div>
+      <div class="q-text">보안 업계 경험이 없는데 어떻게 커버하실 건가요?</div>
+      <div class="q-hint">다리소프트에서도 AI·도로 기술을 PR로 풀어냈다는 사례 활용. "기술이 낯선 상황에서도 학습해 성과를 냈다"는 논리. + 지니언스 솔루션 사전 공부했다는 사실 어필.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-label">높음</div>
+      <div class="q-text">보도자료를 작성하실 때 어떤 프로세스로 하시나요?</div>
+      <div class="q-hint">기술팀 브리핑 → 핵심 메시지 도출(기자 관점) → 역삼각형 구조 → 배포 후 개별 기자 팔로업 순서로 설명.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-label">높음</div>
+      <div class="q-text">미디어 인서 네트워크가 없다고 하셨는데 어떻게 구축하실 생각이에요?</div>
+      <div class="q-hint">지니언스 기존 보도자료를 쓴 기자들 파악했다는 점 언급. 관계는 좋은 자료를 지속적으로 제공하면 자연히 형성된다는 논리. + 인터뷰 요청이 먼저 온 경험 사례.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-label">높음</div>
+      <div class="q-text">왜 마케팅에서 PR로 전향하려 하세요?</div>
+      <div class="q-hint">CEO 인터뷰 후 지자체 연락 → 기사의 무게가 다른 채널과 다르다는 체감. 보도자료 쓸 때 가장 몰입. B2G 구조 제약으로 PR을 제대로 못한 환경 → 전략적으로 작동하는 환경에서 집중하고 싶다.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-label">중간</div>
+      <div class="q-text">C레벨 인터뷰 기사를 써보셨나요?</div>
+      <div class="q-hint">포트폴리오의 CEO 인터뷰 기사 사례. 어떤 메시지를 설계했는지, 어떤 매체에 게재됐는지, 반응이 어땠는지 (경북대 IT동아 사례 등) 구체적으로 설명.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-label">중간</div>
+      <div class="q-text">지니언스 최근 뉴스나 이슈 아는 것 있으면 말해보세요.</div>
+      <div class="q-hint">AV-Comparatives 글로벌 인증, EDR 공공 7년 연속 1위, 1Q 최대 실적, RSAC 2026 참가, 양자 보안 개발 중 — 이 중 2~3개를 자연스럽게 언급.</div>
+    </div>
+
+    <div class="q-item">
+      <div class="q-label">중간</div>
+      <div class="q-text">상장사 IR 지원 경험 있으세요?</div>
+      <div class="q-hint">다리소프트 IR Deck 직접 작성 경험 활용. 투자자 향 커뮤니케이션과 언론 향 커뮤니케이션의 차이를 이해한다는 점 어필.</div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // 현재 스크롤 위치에 따라 nav 활성화
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 80) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+
+</body>
+</html>
